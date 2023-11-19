@@ -9,11 +9,10 @@
 		name="primeflex/3.3.1/primeflex.min.css" />
 </h:head>
 <h:body>
-	<ui:include src="/menuTemplate.xhtml" />
+	<ui:include src="/menuTemplate.xhtml"></ui:include>
 	<div class="card crud-demo">
 		<h:form id="form">
 			<p:growl id="messages" showDetail="true" />
-
 			<p:toolbar>
 				<p:toolbarGroup>
 					<p:commandButton value="New" icon="pi pi-plus"
@@ -51,7 +50,7 @@
 				rowSelectMode="add" paginatorPosition="bottom">
 				<f:facet name="header">
 					<div class="products-table-header">
-						<span style="font-weight: bold">PRODUCTS</span> <span
+						<span style="font-weight: bold">Empleados</span> <span
 							class="filter-container ui-input-icon-left"> <i
 							class="pi pi-search"></i> <p:inputText id="globalFilter"
 								onkeyup="PF('dtProducts').filter()" placeholder="Search" />
@@ -69,28 +68,41 @@
 
 				<p:column selectionMode="multiple" exportable="false"></p:column>
 
-				<p:column headerText="Code" sortBy="#{product.code}"
+				<p:column headerText="Código" sortBy="#{product.code}"
 					filterBy="#{product.code}">
 					<h:outputText value="#{product.code}" />
 				</p:column>
-				<p:column headerText="Name" sortBy="#{product.name}"
+				<p:column headerText="Nombre" sortBy="#{product.name}"
 					filterBy="#{product.name}">
 					<h:outputText value="#{product.name}" />
 				</p:column>
-				<p:column headerText="Image" exportable="false">
-					<p:graphicImage name="resources/images/#{product.image}"
-						library="demo" styleClass="product-image" />
+				<p:column headerText="Dependencia" sortBy="#{product.category}">
+					<h:outputText value="#{product.category}" />
 				</p:column>
-				<p:column headerText="Price" sortBy="#{product.price}">
-					<h:outputText value="#{product.price}" style="font-weight: 700">
-						<f:convertNumber currencySymbol="$" type="currency" />
-					</h:outputText>
-				</p:column>
-				<p:column headerText="Category" sortBy="#{product.category}"
+				<p:column headerText="Cargo" sortBy="#{product.category}"
 					filterBy="#{product.category}">
 					<h:outputText value="#{product.category}" />
 				</p:column>
-
+				<p:column headerText="EPS" sortBy="#{product.category}"
+					filterBy="#{product.category}">
+					<h:outputText value="#{product.category}" />
+				</p:column>
+				<p:column headerText="ARL" sortBy="#{product.category}"
+					filterBy="#{product.category}">
+					<h:outputText value="#{product.category}" />
+				</p:column>
+				<p:column headerText="Pensión" sortBy="#{product.category}"
+					filterBy="#{product.category}">
+					<h:outputText value="#{product.category}" />
+				</p:column>
+				<p:column headerText="Sueldo" sortBy="#{product.category}"
+					filterBy="#{product.category}">
+					<h:outputText value="#{product.category}" />
+				</p:column>
+				<p:column headerText="Ingreso" sortBy="#{product.category}"
+					filterBy="#{product.category}">
+					<h:outputText value="#{product.category}" />
+				</p:column>
 				<p:column exportable="false">
 					<p:commandButton icon="pi pi-pencil"
 						update=":dialogs:manage-product-content"
@@ -101,57 +113,56 @@
 							target="#{crudView.selectedProduct}" />
 						<p:resetInput target=":dialogs:manage-product-content" />
 					</p:commandButton>
-					<p:commandButton class="ui-button-warning rounded-button"
-						icon="pi pi-trash" process="@this"
-						oncomplete="PF('deleteProductDialog').show()">
-						<f:setPropertyActionListener value="#{product}"
-							target="#{crudView.selectedProduct}" />
-					</p:commandButton>
-				</p:column>	
+				</p:column>
 
 			</p:dataTable>
 		</h:form>
+
 		<h:form id="dialogs">
-			<p:dialog header="Product Details" showEffect="fade" modal="true"
+			<p:dialog header="Agregar/Editar empleado" showEffect="fade" modal="true"
 				widgetVar="manageProductDialog" responsive="true">
 				<p:outputPanel id="manage-product-content" class="ui-fluid">
 					<p:outputPanel rendered="#{not empty crudView.selectedProduct}">
-						<p:graphicImage
-							name="resources/images/#{crudView.selectedProduct.image}"
-							library="demo" styleClass="product-image"
-							rendered="#{not empty crudView.selectedProduct.image}" />
-						<div class="field">
-							<p:outputLabel for="name">Name</p:outputLabel>
-							<p:inputText id="name" value="#{crudView.selectedProduct.name}"
-								required="true" />
-						</div>
-						<div class="field">
-							<p:outputLabel for="description">Description</p:outputLabel>
-							<p:inputTextarea id="description"
-								value="#{crudView.selectedProduct.description}" />
-						</div>
-						<div class="field">
-							<p:outputLabel for="category">Category</p:outputLabel>
-							<p:selectOneRadio id="category"
-								value="#{crudView.selectedProduct.category}" layout="responsive"
-								columns="2">
-								<f:selectItem itemLabel="Accessories" itemValue="Accessories" />
-								<f:selectItem itemLabel="Clothing" itemValue="Clothing" />
-								<f:selectItem itemLabel="Electronics" itemValue="Electronics" />
-								<f:selectItem itemLabel="Fitness" itemValue="Fitness" />
-							</p:selectOneRadio>
-						</div>
 						<div class="formgrid grid">
-							<div class="field col">
-								<p:outputLabel for="price">Price</p:outputLabel>
-								<p:inputNumber id="price"
-									value="#{crudView.selectedProduct.price}" symbol=" USD"
-									symbolPosition="s" decimalSeparator="." thousandSeparator="," />
+							<div class="field col-12">
+								<p:outputLabel for="nombre">Nombre</p:outputLabel>
+								<p:inputText id="nombre" value="#{crudView.selectedProduct.name}"
+									required="true" />
 							</div>
-							<div class="field col">
-								<p:outputLabel for="quantity">Quantity</p:outputLabel>
-								<p:spinner id="quantity" min="0"
-									value="#{crudView.selectedProduct.quantity}" />
+							<div class="field col-12 md:col-6">
+								<p:outputLabel for="dependencia">Dependencia</p:outputLabel>
+								<p:inputText id="dependencia"
+									value="#{crudView.selectedProduct.description}" required="true"/>
+							</div>
+							<div class="field col-12 md:col-6">
+								<p:outputLabel for="cargo">Cargo</p:outputLabel>
+								<p:inputText id="cargo"
+									value="#{crudView.selectedProduct.description}" required="true"/>
+							</div>
+							<div class="field col-12 md:col-6">
+								<p:outputLabel for="eps">EPS</p:outputLabel>
+								<p:inputText id="eps"
+									value="#{crudView.selectedProduct.description}" required="true"/>
+							</div>
+							<div class="field col-12 md:col-6">
+								<p:outputLabel for="arl">ARL</p:outputLabel>
+								<p:inputText id="arl"
+									value="#{crudView.selectedProduct.description}" required="true"/>
+							</div>	
+							<div class="field col-12 md:col-6">
+								<p:outputLabel for="pension">Pensión</p:outputLabel>
+								<p:inputText id="pension"
+									value="#{crudView.selectedProduct.description}" required="true"/>
+							</div>
+							<div class="field col-12 md:col-3">
+								<p:outputLabel for="sueldo">Sueldo</p:outputLabel>
+								<p:inputNumber id="sueldo"
+									value="" required="true"/>
+							</div>
+							<div class="field col-12 md:col-3">
+								<p:outputLabel for="ingreso">Fecha de Ingreso</p:outputLabel>
+								<p:datePicker id="ingreso"
+									value="" required="true"/>
 							</div>
 						</div>
 					</p:outputPanel>

@@ -36,29 +36,11 @@ body {
 <h:body>
 	<div class="z-5 sticky top-auto">
 		<h:form>
-			<p:menubar>
-				<p:menuitem outcome="/tablas" icon="pi pi-fw pi-cloud" value = "Inicio"></p:menuitem>
-				<p:submenu label="Nuestros Productos"
-					icon="pi pi-fw pi-shopping-bag">
-					<p:submenu label="New" icon="pi pi-fw pi-plus">
-						<p:menuitem value="Bookmark" icon="pi pi-fw pi-bookmark" />
-						<p:menuitem value="Video" icon="pi pi-fw pi-video" />
-					</p:submenu>
-					<p:menuitem value="Delete" icon="pi pi-fw pi-trash" />
-					<p:divider />
-					<p:menuitem value="Export" icon="pi pi-fw pi-external-link" />
-				</p:submenu>
-
-				<p:submenu label="Nuestros servicios" icon="pi pi-fw pi-briefcase">
-					<p:menuitem value="Left" icon="pi pi-fw pi-align-left" />
-					<p:menuitem value="Right" icon="pi pi-fw pi-align-right" />
-					<p:menuitem value="Center" icon="pi pi-fw pi-align-center" />
-					<p:menuitem value="Justify" icon="pi pi-fw pi-align-justify" />
-				</p:submenu>
-				<p:submenu icon="pi pi-user" style = "float: right;">
-					<p:menuitem value="Iniciar Sesión" outcome="/index" />
-					<p:menuitem value="Registrarse" outcome="registro" />
-				</p:submenu>
+			<p:menubar class = "flex align-items-center justify-content-center">
+				<p:menuitem outcome="/tablaempleados" icon="pi pi-users	" value = "Empleados"></p:menuitem>
+				<p:menuitem outcome="/tablanominas" icon="pi pi-money-bill" value = "Nóminas"></p:menuitem>
+				<p:menuitem outcome="/tablalibros" icon="pi pi-book" value = "Libros"></p:menuitem>
+				<p:menuitem outcome="/tablapeliculas" icon="pi pi-video" value = "Películas"></p:menuitem>		
 			</p:menubar>
 		</h:form>
 	</div>
