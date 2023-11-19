@@ -17,14 +17,6 @@
     <param-value>saga</param-value>
   </context-param>
   <context-param>
-    <param-name>primefaces.PRIVATE_CAPTCHA_KEY</param-name>
-    <param-value>6LdvrfYoAAAAAG85YBzxsCoLgzAZKcjT08moLKOW</param-value>
-  </context-param>
-  <context-param>
-    <param-name>primefaces.PUBLIC_CAPTCHA_KEY</param-name>
-    <param-value>Nano T-Sky</param-value>
-  </context-param>
-  <context-param>
     <param-name>primefaces.CSP_POLICY</param-name>
     <param-value>script-src 'self' https: *.googleapis.com</param-value>
   </context-param>
