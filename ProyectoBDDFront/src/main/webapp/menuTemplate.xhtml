@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+<h:head>
+	<h:outputStylesheet library="webjars"
+		name="primeflex/3.3.1/primeflex.min.css" />
+	<style>
+.ui-icon.inicio-icon {
+	background: url(resources/images/NBUS.png) !important;
+	height: 50px;
+	width: 50px;
+	background-position: center !important;
+}
+
+body {
+	margin: 0;
+	padding: 0;
+}
+
+.navbar-container {
+	background-color: #333;
+	top: 0;
+	width: 100%;
+	z-index: 1000;
+}
+
+.navbar-container .ui-menubar {
+	padding-top: 10px;
+	padding-bottom: 10px;
+}
+</style>
+</h:head>
+<h:body>
+	<div class="z-5 sticky top-auto">
+		<h:form>
+			<p:menubar class = "flex align-items-center justify-content-center">
+				<p:menuitem outcome="/tablaempleados" icon="pi pi-users	" value = "Empleados"></p:menuitem>
+				<p:menuitem outcome="/tablanominas" icon="pi pi-money-bill" value = "Nóminas"></p:menuitem>
+				<p:menuitem outcome="/tablalibros" icon="pi pi-book" value = "Libros"></p:menuitem>
+				<p:menuitem outcome="/tablapeliculas" icon="pi pi-video" value = "Películas"></p:menuitem>		
+			</p:menubar>
+		</h:form>
+	</div>
+</h:body>
+</html>
