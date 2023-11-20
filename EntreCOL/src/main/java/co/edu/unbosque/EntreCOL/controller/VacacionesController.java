@@ -7,16 +7,22 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import co.edu.unbosque.EntreCOL.model.Empleados;
 import co.edu.unbosque.EntreCOL.model.Vacaciones;
 import co.edu.unbosque.EntreCOL.repository.EmpleadosRepository;
 import co.edu.unbosque.EntreCOL.repository.VacacionesRepository;
 
+@CrossOrigin(origins = "*")
+@RestController
+@RequestMapping("/Vacaciones")
 public class VacacionesController {
 	
 	@Autowired

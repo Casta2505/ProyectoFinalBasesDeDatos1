@@ -10,7 +10,6 @@ import co.edu.unbosque.EntreCOL.model.Empleados;
 public interface EmpleadosRepository extends CrudRepository<Empleados, Integer>{
 	
 	public Optional<Empleados> findByCodigo(Integer codigo);
-	
 	public List<Empleados> findAll();
 
 }
