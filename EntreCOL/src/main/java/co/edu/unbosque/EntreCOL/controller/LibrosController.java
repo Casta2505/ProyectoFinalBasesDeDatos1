@@ -45,11 +45,6 @@ public class LibrosController {
             return "Error al procesar el archivo";
         }
 	}
-
-	@GetMapping("/")
-	public String generarPaginaPrincipal(Model model) {
-		return "Inicio";
-	}
 	
 	@GetMapping("/listar")
 	public ResponseEntity<List<Libros>> getAll(){

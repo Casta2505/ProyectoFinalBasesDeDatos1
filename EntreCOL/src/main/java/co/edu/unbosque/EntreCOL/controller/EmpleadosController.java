@@ -36,7 +36,7 @@ public class EmpleadosController {
 	@Autowired
 	private NominaEmpleadosRepository daoNominaEmpleado;
 
-	@PostMapping("/empleados")
+	@PostMapping("/leer")
 	public String leerArchivo(@RequestParam("file") MultipartFile file, Model model) {
 		if (file.isEmpty()) {
 			return "Por favor seleccione un archivo para subir";

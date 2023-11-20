@@ -29,7 +29,7 @@ public class PeliculasController {
 	@Autowired
 	private PeliculasRepository daoPeliculas;
 	
-	@PostMapping("/pelicula")
+	@PostMapping("/leer")
 	public String leerArchivo(@RequestParam("file") MultipartFile file, Model model) {
 	    if (file.isEmpty()) {
 	        return "Por favor seleccione un archivo para subir";
