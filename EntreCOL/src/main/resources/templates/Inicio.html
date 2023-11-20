@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Subir archivo xlsx</title>
+</head>
+<body>
+    <div>
+        <h1>Subir archivo xlsx</h1>
+        <form method="POST" action="/empleados" enctype="multipart/form-data">
+            <input type="file" name="file" accept=".xlsx" />
+            <button type="submit">Subir</button>
+        </form>
+    </div>
+</body>
+</html>
+
