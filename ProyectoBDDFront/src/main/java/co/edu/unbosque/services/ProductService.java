@@ -20,6 +20,8 @@ public class ProductService {
 		products = new ArrayList<>();
 		products.add(new Product(1, "f230fh0g", "Bamboo Watch", "Product Description", "LogoUni.jpg", 65,
 				"Accessories", 24, 5));
+		products.add(new Product(1, "f230fh0g", "Bamboo Watch", "Product Description", "LogoUni.jpg", 65,
+				"Accessories", 24, 5));
 
 	}
 
