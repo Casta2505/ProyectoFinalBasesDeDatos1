@@ -1,6 +1,8 @@
 package co.edu.unbosque.EntreCOL.model;
 
-import java.util.Date;
+import java.time.LocalDate;
+
+import org.springframework.format.annotation.DateTimeFormat;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -32,13 +34,17 @@ public class NominaEmpleado {
 	
 	private Integer diasVacaciones;
 	
-	private Date inicioVacaciones;
+	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+	private LocalDate inicioVacaciones;
 	
-	private Date terminacionVacaciones;
+	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+	private LocalDate terminacionVacaciones;
 	
-	private Date inicioIncapacidad;
+	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+	private LocalDate inicioIncapacidad;
 	
-	private Date terminacionIncapacidad;
+	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+	private LocalDate terminacionIncapacidad;
 	
 	private Double bonificacion;
 	
@@ -52,19 +58,19 @@ public class NominaEmpleado {
 		this.id = id;
 	}
 
-	public Date getInicioVacaciones() {
+	public LocalDate getInicioVacaciones() {
 		return inicioVacaciones;
 	}
 
-	public void setInicioVacaciones(Date inicioVacaciones) {
+	public void setInicioVacaciones(LocalDate inicioVacaciones) {
 		this.inicioVacaciones = inicioVacaciones;
 	}
 
-	public Date getTerminacionVacaciones() {
+	public LocalDate getTerminacionVacaciones() {
 		return terminacionVacaciones;
 	}
 
-	public void setTerminacionVacaciones(Date terminacionVacaciones) {
+	public void setTerminacionVacaciones(LocalDate terminacionVacaciones) {
 		this.terminacionVacaciones = terminacionVacaciones;
 	}
 
@@ -116,19 +122,19 @@ public class NominaEmpleado {
 		this.diasVacaciones = diasVacaciones;
 	}
 
-	public Date getInicioIncapacidad() {
+	public LocalDate getInicioIncapacidad() {
 		return inicioIncapacidad;
 	}
 
-	public void setInicioIncapacidad(Date inicioIncapacidad) {
+	public void setInicioIncapacidad(LocalDate inicioIncapacidad) {
 		this.inicioIncapacidad = inicioIncapacidad;
 	}
 
-	public Date getTerminacionIncapacidad() {
+	public LocalDate getTerminacionIncapacidad() {
 		return terminacionIncapacidad;
 	}
 
-	public void setTerminacionIncapacidad(Date terminacionIncapacidad) {
+	public void setTerminacionIncapacidad(LocalDate terminacionIncapacidad) {
 		this.terminacionIncapacidad = terminacionIncapacidad;
 	}
 

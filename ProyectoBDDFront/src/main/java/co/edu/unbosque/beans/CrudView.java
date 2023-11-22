@@ -6,8 +6,8 @@ import java.util.UUID;
 
 import org.primefaces.PrimeFaces;
 
+import co.edu.unbosque.daos.ProductService;
 import co.edu.unbosque.persistence.Product;
-import co.edu.unbosque.services.ProductService;
 import jakarta.annotation.PostConstruct;
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;

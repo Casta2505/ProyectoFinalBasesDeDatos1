@@ -1,27 +1,26 @@
-package co.edu.unbosque.EntreCOL.model;
+package co.edu.unbosque.persistence;
 
 import java.time.LocalDate;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
 
-@Entity
-@Table(name = "Vacaciones")
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class Vacaciones {
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+
 	private Integer idVacaciones;
-	@ManyToOne
-	@JoinColumn(name = "idEmpleados")
-	private Empleados idEmpleados;
-	
+
+	private Empleado idEmpleados;
+
 	private LocalDate inicioVacaciones;
-	
+
 	private LocalDate finVacaciones;
+
+	public Vacaciones(@JsonProperty("idVacaciones") Integer idVacaciones, @JsonProperty("idEmpleados") Empleado idEmpleados, @JsonProperty("inicioVacaciones") LocalDate inicioVacaciones, @JsonProperty("finVacaciones") LocalDate finVacaciones) {
+		super();
+		this.idVacaciones = idVacaciones;
+		this.idEmpleados = idEmpleados;
+		this.inicioVacaciones = inicioVacaciones;
+		this.finVacaciones = finVacaciones;
+	}
 
 	public Integer getIdVacaciones() {
 		return idVacaciones;
@@ -31,11 +30,11 @@ public class Vacaciones {
 		this.idVacaciones = idVacaciones;
 	}
 
-	public Empleados getIdEmpleados() {
+	public Empleado getIdEmpleados() {
 		return idEmpleados;
 	}
 
-	public void setIdEmpleados(Empleados idEmpleados) {
+	public void setIdEmpleados(Empleado idEmpleados) {
 		this.idEmpleados = idEmpleados;
 	}
 
@@ -54,5 +53,5 @@ public class Vacaciones {
 	public void setFinVacaciones(LocalDate finVacaciones) {
 		this.finVacaciones = finVacaciones;
 	}
-	
+
 }

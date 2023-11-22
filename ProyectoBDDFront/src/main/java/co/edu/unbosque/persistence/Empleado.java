@@ -1,8 +1,13 @@
 package co.edu.unbosque.persistence;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+@SuppressWarnings("serial")
 public class Empleado implements Serializable {
+
 	private Integer codigo;
 
 	private String nombre;
@@ -11,7 +16,7 @@ public class Empleado implements Serializable {
 
 	private String cargo;
 
-	private Integer fechaIngreso;
+	private LocalDate fechaIngreso;
 
 	private String eps;
 
@@ -20,6 +25,23 @@ public class Empleado implements Serializable {
 	private String pension;
 
 	private Double sueldo;
+
+	public Empleado(@JsonProperty("codigo") Integer codigo, @JsonProperty("nombre") String nombre,
+			@JsonProperty("dependencia") String dependencia, @JsonProperty("cargo") String cargo,
+			@JsonProperty("fechaIngreso") LocalDate fechaIngreso, @JsonProperty("eps") String eps,
+			@JsonProperty("arl") String arl, @JsonProperty("pension") String pension,
+			@JsonProperty("sueldo") Double sueldo) {
+		super();
+		this.codigo = codigo;
+		this.nombre = nombre;
+		this.dependencia = dependencia;
+		this.cargo = cargo;
+		this.fechaIngreso = fechaIngreso;
+		this.eps = eps;
+		this.arl = arl;
+		this.pension = pension;
+		this.sueldo = sueldo;
+	}
 
 	public Integer getCodigo() {
 		return codigo;
@@ -53,11 +75,11 @@ public class Empleado implements Serializable {
 		this.cargo = cargo;
 	}
 
-	public Integer getFechaIngreso() {
+	public LocalDate getFechaIngreso() {
 		return fechaIngreso;
 	}
 
-	public void setFechaIngreso(Integer fechaIngreso) {
+	public void setFechaIngreso(LocalDate fechaIngreso) {
 		this.fechaIngreso = fechaIngreso;
 	}
 
@@ -92,6 +114,5 @@ public class Empleado implements Serializable {
 	public void setSueldo(Double sueldo) {
 		this.sueldo = sueldo;
 	}
-	
-	
+
 }

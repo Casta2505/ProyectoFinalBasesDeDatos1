@@ -1,12 +1,15 @@
 package co.edu.unbosque.persistence;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDate;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
+@SuppressWarnings("serial")
 public class Nomina implements Serializable {
-	private int id;
 
-	private int idEmpleado;
+	private Integer id;
+
+	private Empleado idEmpleado;
 
 	private boolean novedadIncapacidad;
 
@@ -18,38 +21,43 @@ public class Nomina implements Serializable {
 
 	private Integer diasVacaciones;
 
-	private Date inicioVacaciones;
+	private LocalDate inicioVacaciones;
 
-	private Date terminacionVacaciones;
+	private LocalDate terminacionVacaciones;
 
-	private Date inicioIncapacidad;
+	private LocalDate inicioIncapacidad;
 
-	private Date terminacionIncapacidad;
+	private LocalDate terminacionIncapacidad;
 
 	private Double bonificacion;
 
 	private Double transporte;
-	
-	@Override
-	public Nomina clone() {
-		Nomina clonedNomina = new Nomina();
-		clonedNomina.setId(getId());
-		clonedNomina.setIdEmpleado(getIdEmpleado());
-		clonedNomina.setNovedadIncapacidad(isNovedadIncapacidad());
-		clonedNomina.setNovedadVacaciones(isNovedadVacaciones());
-		clonedNomina.setDiasTrabajados(getDiasTrabajados());
-		clonedNomina.setDiasIncapacidad(getDiasIncapacidad());
-		clonedNomina.setDiasVacaciones(getDiasVacaciones());
-		clonedNomina.setInicioVacaciones(getInicioVacaciones() != null ? (Date) getInicioVacaciones().clone() : null);
-		clonedNomina.setTerminacionVacaciones(
-				getTerminacionVacaciones() != null ? (Date) getTerminacionVacaciones().clone() : null);
-		clonedNomina
-				.setInicioIncapacidad(getInicioIncapacidad() != null ? (Date) getInicioIncapacidad().clone() : null);
-		clonedNomina.setTerminacionIncapacidad(
-				getTerminacionIncapacidad() != null ? (Date) getTerminacionIncapacidad().clone() : null);
-		clonedNomina.setBonificacion(getBonificacion());
-		clonedNomina.setTransporte(getTransporte());
-		return clonedNomina;
+
+	public Nomina(@JsonProperty("id") Integer id, @JsonProperty("idEmpleado") Empleado idEmpleado,
+			@JsonProperty("novedadIncapacidad") boolean novedadIncapacidad,
+			@JsonProperty("novedadVacaciones") boolean novedadVacaciones,
+			@JsonProperty("diasTrabajados") Integer diasTrabajados,
+			@JsonProperty("diasIncapacidad") Integer diasIncapacidad,
+			@JsonProperty("diasVacaciones") Integer diasVacaciones,
+			@JsonProperty("inicioVacaciones") LocalDate inicioVacaciones,
+			@JsonProperty("terminacionVacaciones") LocalDate terminacionVacaciones,
+			@JsonProperty("inicioIncapacidad") LocalDate inicioIncapacidad,
+			@JsonProperty("terminacionIncapacidad") LocalDate terminacionIncapacidad,
+			@JsonProperty("bonificacion") Double bonificacion, @JsonProperty("transporte") Double transporte) {
+		super();
+		this.id = id;
+		this.idEmpleado = idEmpleado;
+		this.novedadIncapacidad = novedadIncapacidad;
+		this.novedadVacaciones = novedadVacaciones;
+		this.diasTrabajados = diasTrabajados;
+		this.diasIncapacidad = diasIncapacidad;
+		this.diasVacaciones = diasVacaciones;
+		this.inicioVacaciones = inicioVacaciones;
+		this.terminacionVacaciones = terminacionVacaciones;
+		this.inicioIncapacidad = inicioIncapacidad;
+		this.terminacionIncapacidad = terminacionIncapacidad;
+		this.bonificacion = bonificacion;
+		this.transporte = transporte;
 	}
 
 	public int getId() {
@@ -60,11 +68,11 @@ public class Nomina implements Serializable {
 		this.id = id;
 	}
 
-	public int getIdEmpleado() {
+	public Empleado getIdEmpleado() {
 		return idEmpleado;
 	}
 
-	public void setIdEmpleado(int idEmpleado) {
+	public void setIdEmpleado(Empleado idEmpleado) {
 		this.idEmpleado = idEmpleado;
 	}
 
@@ -108,35 +116,35 @@ public class Nomina implements Serializable {
 		this.diasVacaciones = diasVacaciones;
 	}
 
-	public Date getInicioVacaciones() {
+	public LocalDate getInicioVacaciones() {
 		return inicioVacaciones;
 	}
 
-	public void setInicioVacaciones(Date inicioVacaciones) {
+	public void setInicioVacaciones(LocalDate inicioVacaciones) {
 		this.inicioVacaciones = inicioVacaciones;
 	}
 
-	public Date getTerminacionVacaciones() {
+	public LocalDate getTerminacionVacaciones() {
 		return terminacionVacaciones;
 	}
 
-	public void setTerminacionVacaciones(Date terminacionVacaciones) {
+	public void setTerminacionVacaciones(LocalDate terminacionVacaciones) {
 		this.terminacionVacaciones = terminacionVacaciones;
 	}
 
-	public Date getInicioIncapacidad() {
+	public LocalDate getInicioIncapacidad() {
 		return inicioIncapacidad;
 	}
 
-	public void setInicioIncapacidad(Date inicioIncapacidad) {
+	public void setInicioIncapacidad(LocalDate inicioIncapacidad) {
 		this.inicioIncapacidad = inicioIncapacidad;
 	}
 
-	public Date getTerminacionIncapacidad() {
+	public LocalDate getTerminacionIncapacidad() {
 		return terminacionIncapacidad;
 	}
 
-	public void setTerminacionIncapacidad(Date terminacionIncapacidad) {
+	public void setTerminacionIncapacidad(LocalDate terminacionIncapacidad) {
 		this.terminacionIncapacidad = terminacionIncapacidad;
 	}
 

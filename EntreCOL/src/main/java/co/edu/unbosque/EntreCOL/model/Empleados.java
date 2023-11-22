@@ -1,5 +1,9 @@
 package co.edu.unbosque.EntreCOL.model;
 
+import java.time.LocalDate;
+
+import org.springframework.format.annotation.DateTimeFormat;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
@@ -16,7 +20,8 @@ public class Empleados {
 	
 	private String cargo;
 	
-	private Integer fechaIngreso;
+	@DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
+	private LocalDate fechaIngreso;
 	
 	private String eps;
 	
@@ -58,11 +63,11 @@ public class Empleados {
 		this.cargo = cargo;
 	}
 
-	public Integer getFechaIngreso() {
+	public LocalDate getFechaIngreso() {
 		return fechaIngreso;
 	}
 
-	public void setFechaIngreso(Integer fechaIngreso) {
+	public void setFechaIngreso(LocalDate fechaIngreso) {
 		this.fechaIngreso = fechaIngreso;
 	}
 

@@ -1,6 +1,7 @@
 package co.edu.unbosque.EntreCOL.controller;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -11,16 +12,15 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-
 import co.edu.unbosque.EntreCOL.model.Empleados;
 import co.edu.unbosque.EntreCOL.model.NominaEmpleado;
 import co.edu.unbosque.EntreCOL.repository.EmpleadosRepository;
@@ -37,9 +37,9 @@ public class EmpleadosController {
 	private NominaEmpleadosRepository daoNominaEmpleado;
 
 	@PostMapping("/leer")
-	public String leerArchivo(@RequestParam("file") MultipartFile file, Model model) {
+	public ResponseEntity<String> leerArchivo(@RequestParam("file") MultipartFile file) {
 		if (file.isEmpty()) {
-			return "Por favor seleccione un archivo para subir";
+			return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Por favor seleccione un archivo para subir");
 		}
 		try {
 			List<Empleados> empleados = new ArrayList<>();
@@ -48,11 +48,14 @@ public class EmpleadosController {
 				for (int i = 1; i < sheet.getPhysicalNumberOfRows(); i++) {
 					Row row = sheet.getRow(i);
 					Empleados empleado = new Empleados();
-					empleado.setCodigo((int)row.getCell(0).getNumericCellValue());
+					empleado.setCodigo((int) row.getCell(0).getNumericCellValue());
 					empleado.setNombre(row.getCell(1).getStringCellValue());
 					empleado.setDependencia(row.getCell(2).getStringCellValue());
 					empleado.setCargo(row.getCell(3).getStringCellValue());
-					empleado.setFechaIngreso((int) row.getCell(4).getNumericCellValue());
+					String tmp = row.getCell(4).getStringCellValue();
+					LocalDate fechaIngreso = LocalDate.of(Integer.parseInt(tmp.substring(0, 4)),
+							Integer.parseInt(tmp.substring(4, 6)), Integer.parseInt(tmp.substring(6)));
+					empleado.setFechaIngreso(fechaIngreso);
 					empleado.setEps(row.getCell(5).getStringCellValue());
 					empleado.setArl(row.getCell(6).getStringCellValue());
 					empleado.setPension(row.getCell(7).getStringCellValue());
@@ -74,10 +77,22 @@ public class EmpleadosController {
 						nomina.setDiasTrabajados((int) row.getCell(3).getNumericCellValue());
 						nomina.setDiasIncapacidad((int) row.getCell(4).getNumericCellValue());
 						nomina.setDiasVacaciones((int) row.getCell(5).getNumericCellValue());
-						nomina.setInicioVacaciones(row.getCell(6).getDateCellValue());
-						nomina.setTerminacionVacaciones(row.getCell(7).getDateCellValue());
-						nomina.setInicioIncapacidad(row.getCell(8).getDateCellValue());
-						nomina.setTerminacionIncapacidad(row.getCell(9).getDateCellValue());
+						String tmp = row.getCell(6).getStringCellValue();
+						LocalDate fecha = LocalDate.of(Integer.parseInt(tmp.substring(0, 4)),
+								Integer.parseInt(tmp.substring(4, 6)), Integer.parseInt(tmp.substring(6)));
+						nomina.setInicioVacaciones(fecha);
+						tmp = row.getCell(7).getStringCellValue();
+						fecha = LocalDate.of(Integer.parseInt(tmp.substring(0, 4)),
+								Integer.parseInt(tmp.substring(4, 6)), Integer.parseInt(tmp.substring(6)));
+						nomina.setTerminacionVacaciones(fecha);
+						tmp = row.getCell(8).getStringCellValue();
+						fecha = LocalDate.of(Integer.parseInt(tmp.substring(0, 4)),
+								Integer.parseInt(tmp.substring(4, 6)), Integer.parseInt(tmp.substring(6)));
+						nomina.setInicioIncapacidad(fecha);
+						tmp = row.getCell(9).getStringCellValue();
+						fecha = LocalDate.of(Integer.parseInt(tmp.substring(0, 4)),
+								Integer.parseInt(tmp.substring(4, 6)), Integer.parseInt(tmp.substring(6)));
+						nomina.setTerminacionIncapacidad(fecha);
 						nomina.setBonificacion(row.getCell(10).getNumericCellValue());
 						nomina.setTransporte(row.getCell(11).getNumericCellValue());
 						nominas.add(nomina);
@@ -85,10 +100,10 @@ public class EmpleadosController {
 				}
 				daoNominaEmpleado.saveAll(nominas);
 			}
-			return "Inicio";
+			return ResponseEntity.status(HttpStatus.ACCEPTED).body("Archivo procesado con exito");
 		} catch (IOException e) {
 			e.printStackTrace();
-			return "Error al procesar el archivo";
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al procesar el archivo");
 		}
 	}
 
@@ -98,30 +113,31 @@ public class EmpleadosController {
 		}
 		return false;
 	}
-	
+
 	@GetMapping("/listar")
-	public ResponseEntity<List<Empleados>> getAll(){
-		
+	public ResponseEntity<List<Empleados>> getAll() {
+
 		List<Empleados> lista = daoEmpleados.findAll();
-		
-		if(lista.isEmpty()) {
+
+		if (lista.isEmpty()) {
 			return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
 		}
-		return ResponseEntity.status(HttpStatus.ACCEPTED).body(lista);
-		
+		return ResponseEntity.status(HttpStatus.FOUND).body(lista);
+
 	}
-	
+
 	@PostMapping("/agregar")
-	public ResponseEntity<String> agregar(@RequestParam Integer codigo,@RequestParam String nombre, @RequestParam String dependencia, 
-											@RequestParam String cargo, @RequestParam Integer fechaIngreso, @RequestParam String eps,
-											@RequestParam String arl, @RequestParam String pension, @RequestParam Double sueldo){
-		
+	public ResponseEntity<String> agregar(@RequestParam Integer codigo, @RequestParam String nombre,
+			@RequestParam String dependencia, @RequestParam String cargo, @RequestParam LocalDate fechaIngreso,
+			@RequestParam String eps, @RequestParam String arl, @RequestParam String pension,
+			@RequestParam Double sueldo) {
+
 		Optional<Empleados> aux = daoEmpleados.findByCodigo(codigo);
-		
-		if(!aux.isPresent()) {
-			
+
+		if (!aux.isPresent()) {
+
 			Empleados ag = new Empleados();
-			
+
 			ag.setCodigo(codigo);
 			ag.setArl(arl);
 			ag.setCargo(cargo);
@@ -131,29 +147,30 @@ public class EmpleadosController {
 			ag.setNombre(nombre);
 			ag.setPension(pension);
 			ag.setSueldo(sueldo);
-			
+
 			daoEmpleados.save(ag);
-			
+
 			return ResponseEntity.status(HttpStatus.CREATED).body("Creado (201)");
 		}
-		
+
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No creado");
-		
+
 	}
-	
-	@PostMapping("/actualizar")
-	public ResponseEntity<String> actualizar(@RequestParam Integer codigo1, @RequestParam Integer codigo2,@RequestParam String nombre, @RequestParam String dependencia, 
-											@RequestParam String cargo, @RequestParam Integer fechaIngreso, @RequestParam String eps,
-											@RequestParam String arl, @RequestParam String pension, @RequestParam Double sueldo){
-		
+
+	@PutMapping("/actualizar")
+	public ResponseEntity<String> actualizar(@RequestParam Integer codigo1, @RequestParam Integer codigo2,
+			@RequestParam String nombre, @RequestParam String dependencia, @RequestParam String cargo,
+			@RequestParam LocalDate fechaIngreso, @RequestParam String eps, @RequestParam String arl,
+			@RequestParam String pension, @RequestParam Double sueldo) {
+
 		Optional<Empleados> aux = daoEmpleados.findByCodigo(codigo1);
-		
-		if(aux.isPresent()) {
-			
+
+		if (aux.isPresent()) {
+
 			daoEmpleados.delete(aux.get());
-			
+
 			Empleados ag = new Empleados();
-			
+
 			ag.setCodigo(codigo2);
 			ag.setArl(arl);
 			ag.setCargo(cargo);
@@ -163,39 +180,39 @@ public class EmpleadosController {
 			ag.setNombre(nombre);
 			ag.setPension(pension);
 			ag.setSueldo(sueldo);
-			
+
 			daoEmpleados.save(ag);
-			
+
 			return ResponseEntity.status(HttpStatus.CREATED).body("Actualizado (201)");
 		}
-		
+
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No creado");
-		
+
 	}
-	
+
 	@DeleteMapping("/eliminar")
-	public ResponseEntity<String> eliminar(@RequestParam Integer codigo){	
-		
+	public ResponseEntity<String> eliminar(@RequestParam Integer codigo) {
+
 		Optional<Empleados> aux = daoEmpleados.findByCodigo(codigo);
-		
-		if(!aux.isPresent()) {
+
+		if (!aux.isPresent()) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No encontrado");
 		}
 		daoEmpleados.delete(aux.get());
 		return ResponseEntity.status(HttpStatus.FOUND).body("Eliminado");
-		
+
 	}
-	
+
 	@GetMapping("/buscar")
-	public ResponseEntity<Empleados> buscar(@RequestParam Integer codigo){	
-		
+	public ResponseEntity<Empleados> buscar(@RequestParam Integer codigo) {
+
 		Optional<Empleados> aux = daoEmpleados.findByCodigo(codigo);
-		
-		if(!aux.isPresent()) {
+
+		if (!aux.isPresent()) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
 		}
 		return ResponseEntity.status(HttpStatus.FOUND).body(aux.get());
-		
+
 	}
 
 }

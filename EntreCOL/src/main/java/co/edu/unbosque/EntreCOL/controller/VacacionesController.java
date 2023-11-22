@@ -1,9 +1,8 @@
 package co.edu.unbosque.EntreCOL.controller;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,6 +10,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -44,7 +44,7 @@ public class VacacionesController {
 	}
 	
 	@PostMapping("/agregar")
-	public ResponseEntity<String> agregar(@RequestParam Integer idempleado,@RequestParam Date inicioVacaciones, @RequestParam Date finVacaciones){
+	public ResponseEntity<String> agregar(@RequestParam Integer idempleado,@RequestParam LocalDate inicioVacaciones, @RequestParam LocalDate finVacaciones){
 		
 		Optional<Empleados> aux = daoEmpleados.findByCodigo(idempleado);
 		
@@ -65,8 +65,8 @@ public class VacacionesController {
 		
 	}
 	
-	@PostMapping("/actualizar")
-	public ResponseEntity<String> actualizar(@RequestParam Integer id, @RequestParam Integer idempleado,@RequestParam Date inicioVacaciones, @RequestParam Date finVacaciones){
+	@PutMapping("/actualizar")
+	public ResponseEntity<String> actualizar(@RequestParam Integer id, @RequestParam Integer idempleado,@RequestParam LocalDate inicioVacaciones, @RequestParam LocalDate finVacaciones){
 		
 		Optional<Vacaciones> up = daoVacaciones.findById(id);
 		
@@ -97,7 +97,7 @@ public class VacacionesController {
 		
 	}
 	
-	@DeleteMapping
+	@DeleteMapping("/eliminar")
 	public ResponseEntity<String> eliminar(@RequestParam Integer id){
 		
 		Optional<Vacaciones> aux = daoVacaciones.findById(id);

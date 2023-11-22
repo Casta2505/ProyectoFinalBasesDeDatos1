@@ -1,9 +1,8 @@
 package co.edu.unbosque.EntreCOL.controller;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,10 +10,10 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
 import co.edu.unbosque.EntreCOL.model.Empleados;
 import co.edu.unbosque.EntreCOL.model.NominaEmpleado;
 import co.edu.unbosque.EntreCOL.repository.EmpleadosRepository;
@@ -46,8 +45,8 @@ public class NominaEmpleadoController {
 	@PostMapping("/agregar")
 	public ResponseEntity<String> agregar(@RequestParam Integer codempleado, @RequestParam boolean novedadIncapacidad, @RequestParam boolean novedadVacaciones,
 											@RequestParam Integer diasTrabajados, @RequestParam Integer diasIncapacidad, @RequestParam Integer diasVacaciones,
-											@RequestParam Date inicioVacaciones, @RequestParam Date terminacionVacaciones, @RequestParam Date inicioIncapacidad,
-											@RequestParam Date terminacionIncapacidad, @RequestParam Double bonificacion, @RequestParam Double transporte){
+											@RequestParam LocalDate inicioVacaciones, @RequestParam LocalDate terminacionVacaciones, @RequestParam LocalDate inicioIncapacidad,
+											@RequestParam LocalDate terminacionIncapacidad, @RequestParam Double bonificacion, @RequestParam Double transporte){
 		
 		Optional<Empleados> emp = daoEmpleados.findByCodigo(codempleado);
 		
@@ -77,7 +76,7 @@ public class NominaEmpleadoController {
 		
 	}
 	
-	@DeleteMapping
+	@DeleteMapping("/eliminar")
 	public ResponseEntity<String> eliminar(@RequestParam Integer id){
 		
 		Optional<NominaEmpleado> aux = daoNomina.findById(id);
@@ -103,11 +102,11 @@ public class NominaEmpleadoController {
 		
 	}
 	
-	@PostMapping("/actualizar")
+	@PutMapping("/actualizar")
 	public ResponseEntity<String> actualizar(@RequestParam Integer id, @RequestParam Integer codempleado, @RequestParam boolean novedadIncapacidad, @RequestParam boolean novedadVacaciones,
 											@RequestParam Integer diasTrabajados, @RequestParam Integer diasIncapacidad, @RequestParam Integer diasVacaciones,
-											@RequestParam Date inicioVacaciones, @RequestParam Date terminacionVacaciones, @RequestParam Date inicioIncapacidad,
-											@RequestParam Date terminacionIncapacidad, @RequestParam Double bonificacion, @RequestParam Double transporte){
+											@RequestParam LocalDate inicioVacaciones, @RequestParam LocalDate terminacionVacaciones, @RequestParam LocalDate inicioIncapacidad,
+											@RequestParam LocalDate terminacionIncapacidad, @RequestParam Double bonificacion, @RequestParam Double transporte){
 		
 		Optional<NominaEmpleado> aux = daoNomina.findById(id);
 		

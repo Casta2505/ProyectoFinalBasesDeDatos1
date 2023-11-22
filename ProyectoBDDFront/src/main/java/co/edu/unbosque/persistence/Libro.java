@@ -2,7 +2,11 @@ package co.edu.unbosque.persistence;
 
 import java.io.Serializable;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+@SuppressWarnings("serial")
 public class Libro implements Serializable {
+
 	private Integer idlibro;
 
 	private String titulo;
@@ -27,7 +31,26 @@ public class Libro implements Serializable {
 
 	private String publicador;
 
-	
+	public Libro(@JsonProperty("idLibro") Integer idlibro, @JsonProperty("titulo") String titulo,
+			@JsonProperty("autores") String autores, @JsonProperty("rating") String rating,
+			@JsonProperty("isbn") String isbn, @JsonProperty("isbn13") String isbn13,
+			@JsonProperty("idioma") String idioma, @JsonProperty("paginas") String paginas, @JsonProperty("totalRatings") Integer totalRatings,
+			@JsonProperty("totalResenas") Integer totalResenas, @JsonProperty("fechaPublicacion") String fechaPublicacion, @JsonProperty("publicador") String publicador) {
+		super();
+		this.idlibro = idlibro;
+		this.titulo = titulo;
+		this.autores = autores;
+		this.rating = rating;
+		this.isbn = isbn;
+		this.isbn13 = isbn13;
+		this.idioma = idioma;
+		this.paginas = paginas;
+		this.totalRatings = totalRatings;
+		this.totalResenas = totalResenas;
+		this.fechaPublicacion = fechaPublicacion;
+		this.publicador = publicador;
+	}
+
 	public Integer getIdlibro() {
 		return idlibro;
 	}
@@ -123,5 +146,5 @@ public class Libro implements Serializable {
 	public void setPublicador(String publicador) {
 		this.publicador = publicador;
 	}
-	
+
 }
