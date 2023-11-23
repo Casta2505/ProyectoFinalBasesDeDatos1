@@ -6,8 +6,8 @@ import java.util.UUID;
 
 import org.primefaces.PrimeFaces;
 
-import co.edu.unbosque.daos.ProductService;
 import co.edu.unbosque.persistence.Product;
+import co.edu.unbosque.services.ProductService;
 import jakarta.annotation.PostConstruct;
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
@@ -34,7 +34,7 @@ public class CrudView implements Serializable {
 
 	@PostConstruct
 	public void init() {
-		this.products = this.productService.getClonedProducts(1);
+		this.products = this.productService.getClonedProducts(2);
 	}
 
 	public List<Product> getProducts() {
@@ -88,7 +88,7 @@ public class CrudView implements Serializable {
 			return size > 1 ? size + " products selected" : "1 product selected";
 		}
 
-		return "Delete";
+		return "Eliminar";
 	}
 
 	public boolean hasSelectedProducts() {

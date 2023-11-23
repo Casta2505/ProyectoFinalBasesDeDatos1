@@ -52,7 +52,7 @@ public class EmpleadosController {
 					empleado.setNombre(row.getCell(1).getStringCellValue());
 					empleado.setDependencia(row.getCell(2).getStringCellValue());
 					empleado.setCargo(row.getCell(3).getStringCellValue());
-					String tmp = row.getCell(4).getStringCellValue();
+					String tmp = (row.getCell(4).getNumericCellValue() + "").replace(".","").replace("E7", "");
 					LocalDate fechaIngreso = LocalDate.of(Integer.parseInt(tmp.substring(0, 4)),
 							Integer.parseInt(tmp.substring(4, 6)), Integer.parseInt(tmp.substring(6)));
 					empleado.setFechaIngreso(fechaIngreso);
@@ -78,20 +78,34 @@ public class EmpleadosController {
 						nomina.setDiasIncapacidad((int) row.getCell(4).getNumericCellValue());
 						nomina.setDiasVacaciones((int) row.getCell(5).getNumericCellValue());
 						String tmp = row.getCell(6).getStringCellValue();
-						LocalDate fecha = LocalDate.of(Integer.parseInt(tmp.substring(0, 4)),
-								Integer.parseInt(tmp.substring(4, 6)), Integer.parseInt(tmp.substring(6)));
+						
+						LocalDate fecha = null;
+						if(!"".equals(tmp)) {
+						fecha = LocalDate.of(Integer.parseInt(tmp.split("/")[2]),
+								Integer.parseInt(tmp.split("/")[1]), Integer.parseInt(tmp.split("/")[0]));
+						}
 						nomina.setInicioVacaciones(fecha);
 						tmp = row.getCell(7).getStringCellValue();
-						fecha = LocalDate.of(Integer.parseInt(tmp.substring(0, 4)),
-								Integer.parseInt(tmp.substring(4, 6)), Integer.parseInt(tmp.substring(6)));
+						fecha = null;
+						if(!"".equals(tmp)) {
+						fecha = LocalDate.of(Integer.parseInt(tmp.split(".")[0]),
+								Integer.parseInt(tmp.split(".")[1]), Integer.parseInt(tmp.split(".")[2]));
+						}
 						nomina.setTerminacionVacaciones(fecha);
 						tmp = row.getCell(8).getStringCellValue();
-						fecha = LocalDate.of(Integer.parseInt(tmp.substring(0, 4)),
-								Integer.parseInt(tmp.substring(4, 6)), Integer.parseInt(tmp.substring(6)));
+						System.out.println(row.getCell(8).getLocalDateTimeCellValue());
+						fecha = null;
+						if(!"".equals(tmp)) {
+						fecha = LocalDate.of(Integer.parseInt(tmp.split(".")[0]),
+								Integer.parseInt(tmp.split(".")[1]), Integer.parseInt(tmp.split(".")[2]));
+						}
 						nomina.setInicioIncapacidad(fecha);
 						tmp = row.getCell(9).getStringCellValue();
-						fecha = LocalDate.of(Integer.parseInt(tmp.substring(0, 4)),
-								Integer.parseInt(tmp.substring(4, 6)), Integer.parseInt(tmp.substring(6)));
+						fecha = null;
+						if(!"".equals(tmp)) {
+						fecha = LocalDate.of(Integer.parseInt(tmp.split(".")[0]),
+								Integer.parseInt(tmp.split(".")[1]), Integer.parseInt(tmp.split(".")[2]));
+						}
 						nomina.setTerminacionIncapacidad(fecha);
 						nomina.setBonificacion(row.getCell(10).getNumericCellValue());
 						nomina.setTransporte(row.getCell(11).getNumericCellValue());
@@ -100,6 +114,7 @@ public class EmpleadosController {
 				}
 				daoNominaEmpleado.saveAll(nominas);
 			}
+			
 			return ResponseEntity.status(HttpStatus.ACCEPTED).body("Archivo procesado con exito");
 		} catch (IOException e) {
 			e.printStackTrace();
