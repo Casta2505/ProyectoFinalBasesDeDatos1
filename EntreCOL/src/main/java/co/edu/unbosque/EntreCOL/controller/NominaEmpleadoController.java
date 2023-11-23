@@ -42,40 +42,6 @@ public class NominaEmpleadoController {
 		
 	}
 	
-	@PostMapping("/agregar")
-	public ResponseEntity<String> agregar(@RequestParam Integer codempleado, @RequestParam boolean novedadIncapacidad, @RequestParam boolean novedadVacaciones,
-											@RequestParam Integer diasTrabajados, @RequestParam Integer diasIncapacidad, @RequestParam Integer diasVacaciones,
-											@RequestParam LocalDate inicioVacaciones, @RequestParam LocalDate terminacionVacaciones, @RequestParam LocalDate inicioIncapacidad,
-											@RequestParam LocalDate terminacionIncapacidad, @RequestParam Double bonificacion, @RequestParam Double transporte){
-		
-		Optional<Empleados> emp = daoEmpleados.findByCodigo(codempleado);
-		
-		if(emp.isPresent()) {
-			
-			NominaEmpleado ag = new NominaEmpleado();
-			
-			ag.setBonificacion(bonificacion);
-			ag.setDiasIncapacidad(diasIncapacidad);
-			ag.setDiasTrabajados(diasTrabajados);
-			ag.setDiasVacaciones(diasVacaciones);
-			ag.setIdEmpleado(emp.get());
-			ag.setInicioIncapacidad(inicioIncapacidad);
-			ag.setInicioVacaciones(inicioVacaciones);
-			ag.setNovedadIncapacidad(novedadIncapacidad);
-			ag.setNovedadVacaciones(novedadVacaciones);
-			ag.setTerminacionIncapacidad(terminacionIncapacidad);
-			ag.setTerminacionVacaciones(terminacionVacaciones);
-			ag.setTransporte(transporte);
-			
-			daoNomina.save(ag);
-			
-			return ResponseEntity.status(HttpStatus.CREATED).body("Creado (201)");
-		}
-		
-		return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No creado");
-		
-	}
-	
 	@DeleteMapping("/eliminar")
 	public ResponseEntity<String> eliminar(@RequestParam Integer id){
 		

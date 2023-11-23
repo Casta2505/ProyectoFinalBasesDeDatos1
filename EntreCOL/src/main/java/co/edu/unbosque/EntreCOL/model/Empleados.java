@@ -1,11 +1,17 @@
 package co.edu.unbosque.EntreCOL.model;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -30,6 +36,10 @@ public class Empleados {
 	private String pension;
 	
 	private Double sueldo;
+	
+	@OneToMany(mappedBy = "idEmpleado", cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+	@JsonManagedReference
+	private List<NominaEmpleado> nominas;
 
 	public Integer getCodigo() {
 		return codigo;
@@ -102,6 +112,13 @@ public class Empleados {
 	public void setSueldo(Double sueldo) {
 		this.sueldo = sueldo;
 	}
-	
+
+	public List<NominaEmpleado> getNominas() {
+		return nominas;
+	}
+
+	public void setNominas(List<NominaEmpleado> nominas) {
+		this.nominas = nominas;
+	}
 	
 }
