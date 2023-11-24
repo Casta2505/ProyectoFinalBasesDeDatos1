@@ -16,3 +16,6 @@ Y para ejecutar el backend del proyecto, se debe ejecutar como una "Spring Boot 
 Por otro lado para el frontend, se debe ejecutar en un servidor de tomcat version 10.1 como se puede ver en la imagen:
 ![image](https://github.com/Casta2505/ProyectoFinalBasesDeDatos1/assets/114795530/450710e5-80f0-4ec2-81d2-c1d2fdb0f7de)
 De esta manera el frontend del proyecto se ve en una vista web.
+
+### Ambiente
+Eclipse 
