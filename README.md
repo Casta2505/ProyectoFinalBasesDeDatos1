@@ -11,11 +11,13 @@ SpringBoot es un framework utilizado en este proyecto para poder conectar el bac
 Y para ejecutar el backend del proyecto, se debe ejecutar como una "Spring Boot App" como se puede ver en esta imagen:
 ![image](https://github.com/Casta2505/ProyectoFinalBasesDeDatos1/assets/114795530/63501814-e589-423f-83cf-76cc3094a8dc)
 
-### Tomcat
+### Apache Tomcat
 
 Por otro lado para el frontend, se debe ejecutar en un servidor de tomcat version 10.1 como se puede ver en la imagen:
 ![image](https://github.com/Casta2505/ProyectoFinalBasesDeDatos1/assets/114795530/450710e5-80f0-4ec2-81d2-c1d2fdb0f7de)
 De esta manera el frontend del proyecto se ve en una vista web.
 
 ### Ambiente
-Eclipse 
+[EclipseIDE](https://www.eclipse.org/downloads/)
+[Tomcat](https://tomcat.apache.org/download-10.cgi)
+[SpringBoot](https://github.com/spring-projects/spring-boot)
