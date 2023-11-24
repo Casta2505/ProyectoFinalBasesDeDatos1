@@ -18,6 +18,6 @@ Por otro lado para el frontend, se debe ejecutar en un servidor de tomcat versio
 De esta manera el frontend del proyecto se ve en una vista web.
 
 ### Ambiente
-[EclipseIDE](https://www.eclipse.org/downloads/) <br>
-[Tomcat](https://tomcat.apache.org/download-10.cgi) <br>
-[SpringBoot](https://github.com/spring-projects/spring-boot) <br>
+[EclipseIDE](https://www.eclipse.org/downloads/) -
+[Tomcat](https://tomcat.apache.org/download-10.cgi) -
+[SpringBoot](https://github.com/spring-projects/spring-boot) 
