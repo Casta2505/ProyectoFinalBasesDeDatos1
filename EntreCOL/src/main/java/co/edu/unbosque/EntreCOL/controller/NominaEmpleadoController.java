@@ -23,72 +23,63 @@ import co.edu.unbosque.EntreCOL.repository.NominaEmpleadosRepository;
 @RestController
 @RequestMapping("/NominaEmpleado")
 public class NominaEmpleadoController {
-	
+
 	@Autowired
 	private NominaEmpleadosRepository daoNomina;
-	
+
 	@Autowired
 	private EmpleadosRepository daoEmpleados;
-	 
+
 	@GetMapping("/listar")
-	public ResponseEntity<List<NominaEmpleado>> getAll(){
-		
+	public ResponseEntity<List<NominaEmpleado>> getAll() {
+
 		List<NominaEmpleado> lista = daoNomina.findAll();
-		
-		if(lista.isEmpty()) {
+
+		if (lista.isEmpty()) {
 			return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
 		}
 		return ResponseEntity.status(HttpStatus.ACCEPTED).body(lista);
-		
+
 	}
-	
+
 	@DeleteMapping("/eliminar")
-	public ResponseEntity<String> eliminar(@RequestParam Integer id){
-		
+	public ResponseEntity<String> eliminar(@RequestParam Integer id) {
+
 		Optional<NominaEmpleado> aux = daoNomina.findById(id);
-		
-		if(!aux.isPresent()) {
+
+		if (!aux.isPresent()) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No encontrado");
 		}
-		
+
 		daoNomina.delete(aux.get());
 		return ResponseEntity.status(HttpStatus.FOUND).body("Eliminado");
-		
+
 	}
-	
+
 	@GetMapping("/buscar")
-	public ResponseEntity<NominaEmpleado> buscar(@RequestParam Integer id){
-		
+	public ResponseEntity<NominaEmpleado> buscar(@RequestParam Integer id) {
+
 		Optional<NominaEmpleado> aux = daoNomina.findById(id);
-		
-		if(!aux.isPresent()) {
+
+		if (!aux.isPresent()) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
 		}
 		return ResponseEntity.status(HttpStatus.FOUND).body(aux.get());
-		
+
 	}
-	
+
 	@PutMapping("/actualizar")
-	public ResponseEntity<String> actualizar(@RequestParam Integer id, @RequestParam Integer codempleado, @RequestParam boolean novedadIncapacidad, @RequestParam boolean novedadVacaciones,
+	public ResponseEntity<String> actualizar(@RequestParam Integer id, @RequestParam boolean novedadIncapacidad, @RequestParam boolean novedadVacaciones,
 											@RequestParam Integer diasTrabajados, @RequestParam Integer diasIncapacidad, @RequestParam Integer diasVacaciones,
 											@RequestParam LocalDate inicioVacaciones, @RequestParam LocalDate terminacionVacaciones, @RequestParam LocalDate inicioIncapacidad,
 											@RequestParam LocalDate terminacionIncapacidad, @RequestParam Double bonificacion, @RequestParam Double transporte){
 		
-		Optional<NominaEmpleado> aux = daoNomina.findById(id);
-		
-		if(aux.isPresent()) {
-		
-			Optional<Empleados> emp = daoEmpleados.findByCodigo(codempleado);
-		
-			if(emp.isPresent()) {
-			
 				NominaEmpleado ag = new NominaEmpleado();
 				
 				ag.setBonificacion(bonificacion);
 				ag.setDiasIncapacidad(diasIncapacidad);
 				ag.setDiasTrabajados(diasTrabajados);
 				ag.setDiasVacaciones(diasVacaciones);
-				ag.setIdEmpleado(emp.get());
 				ag.setInicioIncapacidad(inicioIncapacidad);
 				ag.setInicioVacaciones(inicioVacaciones);
 				ag.setNovedadIncapacidad(novedadIncapacidad);
@@ -100,14 +91,7 @@ public class NominaEmpleadoController {
 				daoNomina.save(ag);
 			
 				return ResponseEntity.status(HttpStatus.CREATED).body("Actualizado (201)");
-			}
-			
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No se encontró el empleado");
-		
-		}
-		
-		return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No creado");
-		
+				
 	}
 
 }

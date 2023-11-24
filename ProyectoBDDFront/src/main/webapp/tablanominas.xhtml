@@ -109,10 +109,11 @@
 					<p:commandButton icon="pi pi-pencil"
 						update=":dialogs:manage-product-content"
 						oncomplete="PF('manageProductDialog').show()"
+						actionListener="#{nominaBean.agregarEmp}"
 						styleClass="edit-button rounded-button ui-button-success"
 						process="@this">
 						<f:setPropertyActionListener value="#{nomina}"
-							target="#{nominaBean.seleccionados}" />
+							target="#{nominaBean.nomisel}" />
 						<p:resetInput target=":dialogs:manage-product-content" />
 					</p:commandButton>
 				</p:column>
@@ -128,27 +129,51 @@
 						<div class="formgrid grid">
 							<div class="field col-12 md:col-6">
 								<p:outputLabel for="iniciov">Inicio Vacaciones</p:outputLabel>
-								<p:datePicker id="iniciov" value="#{nomina.inicioVacaciones}" required="true" />
+								<p:datePicker id="iniciov" value="#{nominaBean.nomisel.inicioVacaciones}" required="true" />
 							</div>
 							<div class="field col-12 md:col-6">
 								<p:outputLabel for="finv">Fin Vacaciones</p:outputLabel>
-								<p:datePicker id="finv" value="#{nomina.finVacaciones}" required="true" />
+								<p:datePicker id="finv" value="#{nominaBean.nomisel.terminacionVacaciones}" required="true" />
 							</div>
 							<div class="field col-12 md:col-6">
 								<p:outputLabel for="inicioi">Inicio Incapacidad</p:outputLabel>
-								<p:datePicker id="inicioi" value="#{nomina.inicioIncapacidad}" required="true" />
+								<p:datePicker id="inicioi" value="#{nominaBean.nomisel.inicioIncapacidad}" required="true" />
 							</div>
 							<div class="field col-12 md:col-6">
 								<p:outputLabel for="fini">Fin Incapacidad</p:outputLabel>
-								<p:datePicker id="fini" value="#{nomina.finIncapacidad}" required="true" />
+								<p:datePicker id="fini" value="#{nominaBean.nomisel.terminacionIncapacidad}" required="true" />
 							</div>
 							<div class="field col-12 md:col-6">
 								<p:outputLabel for="bonif">Bonificación</p:outputLabel>
-								<p:inputNumber id="bonif" value="#{nomina.bonificacion}" required="true" />
+								<p:inputNumber id="bonif" value="#{nominaBean.nomisel.bonificacion}" required="true" />
 							</div>
 							<div class="field col-12 md:col-6">
 								<p:outputLabel for="transp">Transporte</p:outputLabel>
-								<p:inputNumber id="transp" value="#{nomina.transporte}" required="true" />
+								<p:inputNumber id="transp" value="#{nominaBean.nomisel.transporte}" required="true" />
+							</div>
+							<div class="field col-12 md:col-6">
+								<p:outputLabel for="nincap">NovedadIncapacidad</p:outputLabel>
+								<p:inputText id="nincap" value="#{nominaBean.nomisel.novedadIncapacidad}" required="true" />
+							</div>
+							<div class="field col-12 md:col-6">
+								<p:outputLabel for="nvaca">NovedadVacaciones</p:outputLabel>
+								<p:inputText id="nvaca" value="#{nominaBean.nomisel.novedadVacaciones}" required="true" />
+							</div>
+							<div class="field col-12 md:col-3">
+								<p:outputLabel for="idemp">Id del empleado</p:outputLabel>
+								<p:inputText id="idemp" value="#{nominaBean.nomisel.idEmpleado.codigo}" required="true" type ="number" />
+							</div>
+							<div class="field col-12 md:col-3">
+								<p:outputLabel for="dtrab">DiasTrabajados</p:outputLabel>
+								<p:inputText id="dtrab" value="#{nominaBean.nomisel.diasTrabajados}" required="true" type = "number" />
+							</div>
+							<div class="field col-12 md:col-3">
+								<p:outputLabel for="dincp">DiasIncapacidad</p:outputLabel>
+								<p:inputText id="dincp" value="#{nominaBean.nomisel.diasIncapacidad}" required="true" type ="number"/>
+							</div>
+							<div class="field col-12 md:col-3">
+								<p:outputLabel for="dvacac">DiasVacaciones</p:outputLabel>
+								<p:inputText id="dvacac" value="#{nominaBean.nomisel.diasVacaciones}" required="true" type ="number" />
 							</div>
 						</div>
 					</p:outputPanel>
@@ -156,7 +181,7 @@
 
 				<f:facet name="footer">
 					<p:commandButton value="Save" icon="pi pi-check"
-						actionListener="#{nominaBean.guardar}"
+						actionListener="#{nominaBean.agregar}"
 						update="manage-product-content"
 						process="manage-product-content @this" />
 					<p:commandButton value="Cancel" icon="pi pi-times"

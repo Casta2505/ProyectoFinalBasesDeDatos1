@@ -31,40 +31,25 @@ public class NominaDAO {
 		return null;
 	}
 
-	public String add(Integer codempleado, boolean novedadIncapacidad, boolean novedadVacaciones,
-			Integer diasTrabajados, Integer diasIncapacidad, Integer diasVacaciones, LocalDate inicioVacaciones,
-			LocalDate terminacionVacaciones, LocalDate inicioIncapacidad, LocalDate terminacionIncapacidad,
-			Double bonificacion, Double transporte) {
+	public String delete(Integer id) {
 		try {
-			UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(URL + "agregar");
-			builder.queryParam("codempleado", codempleado);
-			builder.queryParam("novedadIncapacidad", novedadIncapacidad);
-			builder.queryParam("novedadVacaciones", novedadVacaciones);
-			builder.queryParam("diasTrabajados", diasTrabajados);
-			builder.queryParam("diasIncapacidad", diasIncapacidad);
-			builder.queryParam("diasVacaciones", diasVacaciones);
-			builder.queryParam("inicioVacaciones", inicioVacaciones);
-			builder.queryParam("terminacionVacaciones", terminacionVacaciones);
-			builder.queryParam("inicioIncapacidad", inicioIncapacidad);
-			builder.queryParam("terminacionIncapacidad", terminacionIncapacidad);
-			builder.queryParam("bonificacion", bonificacion);
-			builder.queryParam("transporte", transporte);
+			UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(URL + "eliminar");
+			builder.queryParam("id", id);
 			String url = builder.toUriString();
-			ResponseEntity<String> response = restTemplate.postForEntity(url, null, String.class);
+			ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.DELETE, null, String.class);
 			return response.getBody();
 		} catch (Exception e) {
-			return "CONFLICT (CODE 409)";
+			return "NOT FOUND (CODE 404)";
 		}
 	}
 
-	public String actualizar(Integer id, Integer codempleado, boolean novedadIncapacidad, boolean novedadVacaciones,
+public String actualizar(Integer id, Integer codempleado, boolean novedadIncapacidad, boolean novedadVacaciones,
 			Integer diasTrabajados, Integer diasIncapacidad, Integer diasVacaciones, LocalDate inicioVacaciones,
 			LocalDate terminacionVacaciones, LocalDate inicioIncapacidad, LocalDate terminacionIncapacidad,
 			Double bonificacion, Double transporte) {
 		try {
 			UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(URL + "actualizar");
 			builder.queryParam("id", id);
-			builder.queryParam("codempleado", codempleado);
 			builder.queryParam("novedadIncapacidad", novedadIncapacidad);
 			builder.queryParam("novedadVacaciones", novedadVacaciones);
 			builder.queryParam("diasTrabajados", diasTrabajados);
@@ -78,18 +63,6 @@ public class NominaDAO {
 			builder.queryParam("transporte", transporte);
 			String url = builder.toUriString();
 			ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.PUT, null, String.class);
-			return response.getBody();
-		} catch (Exception e) {
-			return "NOT FOUND (CODE 404)";
-		}
-	}
-
-	public String delete(Integer id) {
-		try {
-			UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(URL + "eliminar");
-			builder.queryParam("id", id);
-			String url = builder.toUriString();
-			ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.DELETE, null, String.class);
 			return response.getBody();
 		} catch (Exception e) {
 			return "NOT FOUND (CODE 404)";

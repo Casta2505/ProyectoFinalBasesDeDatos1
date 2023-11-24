@@ -147,7 +147,6 @@ public class EmpleadosController {
 		}
 
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No creado");
-
 	}
 	
 	@PutMapping("/agregarNomina")
@@ -183,7 +182,7 @@ public class EmpleadosController {
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No creado");
 		
 	}
-	
+
 	public ResponseEntity<String> addNomina(@RequestParam Integer codigo, @RequestParam NominaEmpleado nom){
 		
 		try {

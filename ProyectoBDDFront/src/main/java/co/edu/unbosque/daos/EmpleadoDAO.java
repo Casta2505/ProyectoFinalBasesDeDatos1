@@ -47,6 +47,32 @@ public class EmpleadoDAO {
 			return "CONFLICT (CODE 409)";
 		}
 	}
+
+	public String addNomina(Integer codempleado, boolean novedadIncapacidad, boolean novedadVacaciones,
+			Integer diasTrabajados, Integer diasIncapacidad, Integer diasVacaciones, LocalDate inicioVacaciones,
+			LocalDate terminacionVacaciones, LocalDate inicioIncapacidad, LocalDate terminacionIncapacidad,
+			Double bonificacion, Double transporte) {
+		try {
+			UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(URL + "agregarNomina");
+			builder.queryParam("codempleado", codempleado);
+			builder.queryParam("novedadIncapacidad", novedadIncapacidad);
+			builder.queryParam("novedadVacaciones", novedadVacaciones);
+			builder.queryParam("diasTrabajados", diasTrabajados);
+			builder.queryParam("diasIncapacidad", diasIncapacidad);
+			builder.queryParam("diasVacaciones", diasVacaciones);
+			builder.queryParam("inicioVacaciones", inicioVacaciones);
+			builder.queryParam("terminacionVacaciones", terminacionVacaciones);
+			builder.queryParam("inicioIncapacidad", inicioIncapacidad);
+			builder.queryParam("terminacionIncapacidad", terminacionIncapacidad);
+			builder.queryParam("bonificacion", bonificacion);
+			builder.queryParam("transporte", transporte);
+			String url = builder.toUriString();
+			ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.PUT, null, String.class);
+			return response.getBody();
+		} catch (Exception e) {
+			return "NOT FOUND (CODE 404)";
+		}
+	}
 	
 	public List<Empleado> listar(){
     try {
@@ -85,30 +111,6 @@ public class EmpleadoDAO {
 			return response.getBody();
 		} catch (Exception e) {
 			return "CONFLICT (CODE 409)";
-		}
-	}
-	
-	public String actualizar(Integer codigo1, Integer codigo2,
-			String nombre, String dependencia, String cargo,
-			LocalDate fechaIngreso, String eps, String arl,
-			String pension, Double sueldo) {
-		try {
-			UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(URL + "actualizar");
-			builder.queryParam("codigo1", codigo1);
-			builder.queryParam("codigo2", codigo2);
-			builder.queryParam("nombre", nombre);
-			builder.queryParam("dependencia", dependencia);
-			builder.queryParam("cargo", cargo);
-			builder.queryParam("fechaIngreso", fechaIngreso);
-			builder.queryParam("eps", eps);
-			builder.queryParam("arl", arl);
-			builder.queryParam("pension", pension);
-			builder.queryParam("sueldo", sueldo);
-			String url = builder.toUriString();
-			ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.PUT, null, String.class);
-			return response.getBody();
-		} catch (Exception e) {
-			return "NOT FOUND (CODE 404)";
 		}
 	}
 	

@@ -56,10 +56,17 @@ public class EmpleadosBean implements Serializable{
 		seleccionados = new ArrayList<>();
 		empleados = empdao.listar();
 		nuevo();
-		createPieModel();
-		createBarModel();
-		createLineModel1();
-		createLineModel();
+		if(empleados != null){
+			createPieModel();
+			createBarModel();
+			createLineModel1();
+			createLineModel();
+		}else{
+			barModel = new BarChartModel();
+			lineModel1 = new LineChartModel();
+			lineModel = new LineChartModel();
+			pieModel = new PieChartModel();
+		}
 	}
 
 	public List<Empleado> getEmpleados() {
@@ -143,6 +150,18 @@ public class EmpleadosBean implements Serializable{
 			}
 			
 			empdao.leer(archivoTemporal);
+			empleados = empdao.listar();
+			createBarModel();
+			createPieModel();
+			createLineModel();
+			createLineModel1();
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Empleado Añadido"));
+			PrimeFaces.current().executeScript("PF('manageProductDialog').hide()");
+			PrimeFaces.current().ajax().update("form:messages", "form:dt-products");
+			PrimeFaces.current().ajax().update("chart1");
+			PrimeFaces.current().ajax().update("chart2");
+			PrimeFaces.current().ajax().update("chart3");
+			PrimeFaces.current().ajax().update("chart4");
 		} catch (IOException e) {
 
 			e.printStackTrace();
@@ -162,9 +181,17 @@ public class EmpleadosBean implements Serializable{
 		empleados.add(seleccionado);
 		empdao.add(seleccionado.getCodigo(), seleccionado.getNombre(), seleccionado.getDependencia(), seleccionado.getCargo(), 
 				seleccionado.getFechaIngreso(), seleccionado.getEps(), seleccionado.getArl(), seleccionado.getPension(), seleccionado.getSueldo());
+		createBarModel();
+		createPieModel();
+		createLineModel();
+		createLineModel1();
 		FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Empleado Añadido"));
 		PrimeFaces.current().executeScript("PF('manageProductDialog').hide()");
 		PrimeFaces.current().ajax().update("form:messages", "form:dt-products");
+		PrimeFaces.current().ajax().update("chart1");
+		PrimeFaces.current().ajax().update("chart2");
+		PrimeFaces.current().ajax().update("chart3");
+		PrimeFaces.current().ajax().update("chart4");
 	}
 	
 	public boolean haySelec() {
@@ -180,8 +207,16 @@ public class EmpleadosBean implements Serializable{
 		}
 		
 		this.seleccionados = null;
+		createBarModel();
+		createPieModel();
+		createLineModel();
+		createLineModel1();
 		FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Empleados Removidos"));
 		PrimeFaces.current().ajax().update("form:messages", "form:dt-products");
+		PrimeFaces.current().ajax().update("chart1");
+		PrimeFaces.current().ajax().update("chart2");
+		PrimeFaces.current().ajax().update("chart3");
+		PrimeFaces.current().ajax().update("chart4");
 		PrimeFaces.current().executeScript("PF('dtProducts').clearFilters()");
 	}
 	

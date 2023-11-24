@@ -48,11 +48,15 @@ public class PeliculasBean implements Serializable{
 		pelao = new PeliculaDAO();
 		seleccionados = new ArrayList<>();
 		peliculas = pelao.listar();
-		createLineModel();
+		if(peliculas != null){
+			createLineModel();
+		} else {
+			lineModel = new LineChartModel();
+		}
 		nuevo();
 	}
 	
-		public void createLineModel() {
+	public void createLineModel() {
 		lineModel = new LineChartModel();
 		ChartData data = new ChartData();
 		LineChartDataSet dataSet = new LineChartDataSet();
@@ -160,8 +164,10 @@ public class PeliculasBean implements Serializable{
 					outputStream.write(buffer, 0, length);
 				}
 			}
-			
 			pelao.leer(archivoTemporal);
+			peliculas = pelao.listar();
+			createLineModel();
+			PrimeFaces.current().ajax().update("generopelis");
 		} catch (IOException e) {
 
 			e.printStackTrace();
@@ -178,15 +184,12 @@ public class PeliculasBean implements Serializable{
 	
 	public void agregar() {
 		seleccionado.setIdPeliculas(peliculas.get(peliculas.size() - 1).getIdPeliculas() + 1);
-		System.out.println(seleccionado.getNombre());
 		pelao.add(seleccionado.getNombre(), seleccionado.getGenero());
+		createLineModel();
 		FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Pelicula Añadida"));
 		PrimeFaces.current().executeScript("PF('manageProductDialog').hide()");
+		PrimeFaces.current().ajax().update("generopelis");
 		PrimeFaces.current().ajax().update("form:messages", "form:dt-products");
-	}
-	
-	public void eliminar() {
-		
 	}
 	
 	public boolean haySelec() {
@@ -198,10 +201,11 @@ public class PeliculasBean implements Serializable{
 		for(Pelicula e: seleccionados) {
 			this.pelao.delete(e.getIdPeliculas());
 		}
-		
 		this.seleccionados = null;
+		createLineModel();
 		FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("peliculas Removidas"));
 		PrimeFaces.current().ajax().update("form:messages", "form:dt-products");
+		PrimeFaces.current().ajax().update("generopelis");
 		PrimeFaces.current().executeScript("PF('dtProducts').clearFilters()");
 	}
 	

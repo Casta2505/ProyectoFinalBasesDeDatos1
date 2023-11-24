@@ -8,6 +8,8 @@ import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+
+import org.apache.poi.ddf.EscherColorRef.SysIndexSource;
 import org.primefaces.PrimeFaces;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.charts.ChartData;
@@ -48,8 +50,6 @@ public class NominaBean implements Serializable{
 
 	private NominaDAO nomdao;
 
-	private Nomina seleccionado;
-
 	private Nomina nomisel;
 	
 	@PostConstruct
@@ -89,7 +89,7 @@ public class NominaBean implements Serializable{
 	}
 	
 	public void nuevo() {
-		this.nomisel = new Nomina(0, null,
+		this.nomisel = new Nomina(0, new Empleado(0,"","","",LocalDate.now(),"","","",0.0,new ArrayList<>()),
 			false,
 			false,
 			0,
@@ -103,10 +103,9 @@ public class NominaBean implements Serializable{
 	}
 	
 	public void agregar() {
-		seleccionado.setId(nominas.get(nominas.size() - 1).getId() + 1);
-		nominas.add(seleccionado);
-		empdao.add(seleccionado.getIdEmpleado(), seleccionado.isNovedadIncapacidad(), seleccionado.isNovedadVacaciones(), seleccionado.getDiasTrabajados(), 
-				seleccionado.getDiasIncapacidad(), seleccionado.getDiasVacaciones(), seleccionado.getInicioVacaciones(), seleccionado.getTerminacionVacaciones(), seleccionado.getInicioIncapacidad().seleccionado.getTerminacionVacaciones(),seleccionado.getBonificacion(),seleccionado.getTransporte());
+		nomisel.setId(nominas.get(nominas.size() - 1).getId() + 1);
+		empdao.addNomina(nomisel.getIdEmpleado().getCodigo(), nomisel.isNovedadIncapacidad(), nomisel.isNovedadVacaciones(), nomisel.getDiasTrabajados(), 
+				nomisel.getDiasIncapacidad(), nomisel.getDiasVacaciones(), nomisel.getInicioVacaciones(), nomisel.getTerminacionVacaciones(), nomisel.getInicioIncapacidad(),nomisel.getTerminacionIncapacidad(),nomisel.getBonificacion(),nomisel.getTransporte());
 		FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Nómina Añadida"));
 		PrimeFaces.current().executeScript("PF('manageProductDialog').hide()");
 		PrimeFaces.current().ajax().update("form:messages", "form:dt-products");
@@ -117,8 +116,6 @@ public class NominaBean implements Serializable{
 	}
 	
 	public void deleteSelected() {
-		
-		this.nominas.removeAll(this.seleccionados);
 		
 		for(Nomina e: seleccionados) {
 			this.empdao.delete(e.getId());
@@ -137,6 +134,10 @@ public class NominaBean implements Serializable{
 		}
 
 		return "Eliminar";
+	}
+	
+	public void agregarEmp() {
+		this.nomisel.setIdEmpleado(new Empleado(0,"","","",LocalDate.now(),"","","",0.0,new ArrayList<>()));
 	}
 
 	public List<Nomina> getNominas() {
@@ -169,14 +170,6 @@ public class NominaBean implements Serializable{
 
 	public void setNomdao(NominaDAO nomdao) {
 		this.nomdao = nomdao;
-	}
-
-	public Nomina getSeleccionado() {
-		return seleccionado;
-	}
-
-	public void setSeleccionado(Nomina seleccionado) {
-		this.seleccionado = seleccionado;
 	}
 
 	public Nomina getNomisel() {

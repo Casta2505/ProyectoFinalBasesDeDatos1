@@ -49,8 +49,11 @@ public class LibroBean implements Serializable {
 		libdao = new LibroDAO();
 		libros = libdao.listar();
 		seleccionados = new ArrayList<>();
-		lineModel = new LineChartModel();
-		createLineModel();
+		if(seleccionados != null){
+			createLineModel();
+		}else{
+			lineModel = new LineChartModel();
+		}
 		nuevo();
 
 	}
@@ -147,8 +150,10 @@ public class LibroBean implements Serializable {
 			}
 
 			libdao.leer(archivoTemporal);
+			libros = libdao.listar();
+			createLineModel();
+			PrimeFaces.current().ajax().update("librosano");
 		} catch (IOException e) {
-
 			e.printStackTrace();
 		} finally {
 			if (archivoTemporal != null && archivoTemporal.exists()) {
@@ -169,9 +174,11 @@ public class LibroBean implements Serializable {
 				seleccionado.getIsbn(), seleccionado.getIsbn13(), seleccionado.getIdioma(), seleccionado.getPaginas(),
 				seleccionado.getTotalRatings(), seleccionado.getTotalResenas(), seleccionado.getFechaPublicacion(),
 				seleccionado.getPublicador(), seleccionado.getTitulo());
+		createLineModel();
 		FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Libro Añadido"));
 		PrimeFaces.current().executeScript("PF('manageProductDialog').hide()");
 		PrimeFaces.current().ajax().update("form:messages", "form:dt-products");
+		PrimeFaces.current().ajax().update("librosano");
 	}
 
 	public boolean haySelec() {
@@ -187,9 +194,11 @@ public class LibroBean implements Serializable {
 		}
 
 		this.seleccionados = null;
+		createLineModel();
 		FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Empleados Removidos"));
 		PrimeFaces.current().ajax().update("form:messages", "form:dt-products");
 		PrimeFaces.current().executeScript("PF('dtProducts').clearFilters()");
+		PrimeFaces.current().ajax().update("librosano");
 	}
 
 	public String getDeleteButtonMessage() {
