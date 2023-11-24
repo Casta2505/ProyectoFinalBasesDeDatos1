@@ -2,7 +2,10 @@ package co.edu.unbosque.persistence;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @SuppressWarnings("serial")
@@ -16,6 +19,7 @@ public class Empleado implements Serializable {
 
 	private String cargo;
 
+	@JsonFormat(pattern = "yyyy-MM-dd")
 	private LocalDate fechaIngreso;
 
 	private String eps;
@@ -24,13 +28,16 @@ public class Empleado implements Serializable {
 
 	private String pension;
 
+	private List<Nomina> nominas;
+
 	private Double sueldo;
 
+	@JsonCreator
 	public Empleado(@JsonProperty("codigo") Integer codigo, @JsonProperty("nombre") String nombre,
 			@JsonProperty("dependencia") String dependencia, @JsonProperty("cargo") String cargo,
 			@JsonProperty("fechaIngreso") LocalDate fechaIngreso, @JsonProperty("eps") String eps,
 			@JsonProperty("arl") String arl, @JsonProperty("pension") String pension,
-			@JsonProperty("sueldo") Double sueldo) {
+			@JsonProperty("sueldo") Double sueldo, @JsonProperty("nominas") List<Nomina> nominas) {
 		super();
 		this.codigo = codigo;
 		this.nombre = nombre;
@@ -40,6 +47,7 @@ public class Empleado implements Serializable {
 		this.eps = eps;
 		this.arl = arl;
 		this.pension = pension;
+		this.nominas = nominas;
 		this.sueldo = sueldo;
 	}
 
@@ -113,6 +121,14 @@ public class Empleado implements Serializable {
 
 	public void setSueldo(Double sueldo) {
 		this.sueldo = sueldo;
+	}
+
+	public List<Nomina> getNominas() {
+		return nominas;
+	}
+
+	public void setNominas(List<Nomina> nominas) {
+		this.nominas = nominas;
 	}
 
 }

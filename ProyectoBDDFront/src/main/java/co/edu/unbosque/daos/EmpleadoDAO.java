@@ -1,9 +1,12 @@
 package co.edu.unbosque.daos;
 
 import java.io.File;
+import java.nio.file.spi.FileSystemProvider;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
+
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -14,6 +17,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
+
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import co.edu.unbosque.persistence.Empleado;
 
@@ -41,20 +47,52 @@ public class EmpleadoDAO {
 			return "CONFLICT (CODE 409)";
 		}
 	}
-	
-	public List<Empleado> listar(){
+
+	public String addNomina(Integer codempleado, boolean novedadIncapacidad, boolean novedadVacaciones,
+			Integer diasTrabajados, Integer diasIncapacidad, Integer diasVacaciones, LocalDate inicioVacaciones,
+			LocalDate terminacionVacaciones, LocalDate inicioIncapacidad, LocalDate terminacionIncapacidad,
+			Double bonificacion, Double transporte) {
 		try {
-			String url = URL+"listar";
-			ResponseEntity<Empleado[]> response = restTemplate.getForEntity(url, Empleado[].class);
-			if (response.getStatusCode().equals(HttpStatus.FOUND)) {
-				return Arrays.asList(response.getBody());
-			}
+			UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(URL + "agregarNomina");
+			builder.queryParam("codempleado", codempleado);
+			builder.queryParam("novedadIncapacidad", novedadIncapacidad);
+			builder.queryParam("novedadVacaciones", novedadVacaciones);
+			builder.queryParam("diasTrabajados", diasTrabajados);
+			builder.queryParam("diasIncapacidad", diasIncapacidad);
+			builder.queryParam("diasVacaciones", diasVacaciones);
+			builder.queryParam("inicioVacaciones", inicioVacaciones);
+			builder.queryParam("terminacionVacaciones", terminacionVacaciones);
+			builder.queryParam("inicioIncapacidad", inicioIncapacidad);
+			builder.queryParam("terminacionIncapacidad", terminacionIncapacidad);
+			builder.queryParam("bonificacion", bonificacion);
+			builder.queryParam("transporte", transporte);
+			String url = builder.toUriString();
+			ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.PUT, null, String.class);
+			return response.getBody();
 		} catch (Exception e) {
-			return null;
+			return "NOT FOUND (CODE 404)";
 		}
-		return null;
 	}
 	
+	public List<Empleado> listar(){
+    try {
+        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(URL+"listar");
+        String url = builder.toUriString();
+        ResponseEntity<List<Empleado>> response = restTemplate.exchange(
+            url,
+            HttpMethod.GET,
+            null,
+            new ParameterizedTypeReference<List<Empleado>>() {}
+        );
+        if (response.getStatusCode().equals(HttpStatus.FOUND)){
+            return response.getBody();
+        }
+    } catch (Exception e) {
+        e.printStackTrace(); // Imprime la excepción para debug
+    }
+    return null;
+}
+
 	public String add(Integer codigo, String nombre, String dependencia, String cargo, LocalDate fechaIngreso,
 			String eps, String arl, String pension, Double sueldo) {
 		try {
@@ -76,30 +114,6 @@ public class EmpleadoDAO {
 		}
 	}
 	
-	public String actualizar(Integer codigo1, Integer codigo2,
-			String nombre, String dependencia, String cargo,
-			LocalDate fechaIngreso, String eps, String arl,
-			String pension, Double sueldo) {
-		try {
-			UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(URL + "actualizar");
-			builder.queryParam("codigo1", codigo1);
-			builder.queryParam("codigo2", codigo2);
-			builder.queryParam("nombre", nombre);
-			builder.queryParam("dependencia", dependencia);
-			builder.queryParam("cargo", cargo);
-			builder.queryParam("fechaIngreso", fechaIngreso);
-			builder.queryParam("eps", eps);
-			builder.queryParam("arl", arl);
-			builder.queryParam("pension", pension);
-			builder.queryParam("sueldo", sueldo);
-			String url = builder.toUriString();
-			ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.PUT, null, String.class);
-			return response.getBody();
-		} catch (Exception e) {
-			return "NOT FOUND (CODE 404)";
-		}
-	}
-	
 	public String delete(Integer codigo) {
 		try {
 			UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(URL + "eliminar");
@@ -118,9 +132,12 @@ public class EmpleadoDAO {
 			builder.queryParam("codigo", codigo);
 			String url = builder.toUriString();
 			ResponseEntity<Empleado> response = restTemplate.getForEntity(url, Empleado.class);
-			return response.getBody();
+			if(response.getStatusCode().equals(HttpStatus.FOUND)){
+				return response.getBody();
+			}
 		} catch (Exception e) {
 			return null;
 		}
+		return null;
 	}
 }

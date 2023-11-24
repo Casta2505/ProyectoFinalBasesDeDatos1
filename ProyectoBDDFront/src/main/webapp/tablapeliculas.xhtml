@@ -9,44 +9,45 @@
 		name="primeflex/3.3.1/primeflex.min.css" />
 </h:head>
 <h:body>
-<ui:include src="/menuTemplate.xhtml"></ui:include>
+	<ui:include src="/menuTemplate.xhtml"></ui:include>
 	<div class="card crud-demo">
 		<h:form id="form">
 			<p:growl id="messages" showDetail="true" />
 			<p:toolbar>
 				<p:toolbarGroup>
-					<p:commandButton value="New" icon="pi pi-plus"
-						actionListener="#{crudView.openNew}"
+					<p:commandButton value="Nuevo" icon="pi pi-plus"
+						actionListener="#{peliculasBean.nuevo}"
 						update=":dialogs:manage-product-content"
 						oncomplete="PF('manageProductDialog').show()"
 						styleClass="ui-button-success" style="margin-right: .5rem">
 						<p:resetInput target=":dialogs:manage-product-content" />
 					</p:commandButton>
 					<p:commandButton id="delete-products-button"
-						value="#{crudView.deleteButtonMessage}" icon="pi pi-trash"
-						actionListener="#{crudView.deleteSelectedProducts}"
+						value="#{peliculasBean.deleteButtonMessage}" icon="pi pi-trash"
+						actionListener="#{peliculasBean.deleteSelected}"
 						styleClass="ui-button-danger"
-						disabled="#{!crudView.hasSelectedProducts()}" update="@this">
+						disabled="#{!peliculasBean.haySelec()}" update="@this">
 						<p:confirm header="Confirmation"
-							message="Delete the selected products?"
+							message="¿Desea eliminar las películas seleccionadas?"
 							icon="pi pi-exclamation-triangle" />
 					</p:commandButton>
 				</p:toolbarGroup>
 				<p:toolbarGroup align="right">
-					<p:fileUpload mode="simple" skinSimple="true" label="Import"
-						chooseIcon="pi pi-download" />
-					<p:commandButton value="Export" icon="pi pi-upload"
+					<p:fileUpload mode="simple" skinSimple="true"
+						label="Cargar Archivos" chooseIcon="pi pi-download" auto="true"
+						listener="#{peliculasBean.enviar}" process="@this" />
+					<p:commandButton value="Exportar Gráfica" icon="pi pi-upload"
 						styleClass="ui-button-help" ajax="false">
-						<p:dataExporter type="pdf" target="dt-products"
-							fileName="products" />
+						<p:printer target="generopelis" title="Grafica" />
 					</p:commandButton>
 				</p:toolbarGroup>
 			</p:toolbar>
 
-			<p:dataTable id="dt-products" widgetVar="dtProducts" var="product"
-				value="#{crudView.products}" reflow="true"
-				styleClass="products-table" selection="#{crudView.selectedProducts}"
-				rowKey="#{product.id}" paginator="true" rows="10"
+			<p:dataTable id="dt-products" widgetVar="dtProducts" var="pelicula"
+				value="#{peliculasBean.peliculas}" reflow="true"
+				styleClass="products-table"
+				selection="#{peliculasBean.seleccionados}"
+				rowKey="#{pelicula.idPeliculas}" paginator="true" rows="10"
 				rowSelectMode="add" paginatorPosition="bottom">
 				<f:facet name="header">
 					<div class="products-table-header">
@@ -68,17 +69,17 @@
 
 				<p:column selectionMode="multiple" exportable="false"></p:column>
 
-				<p:column headerText="idPelicula" sortBy="#{product.code}"
-					filterBy="#{product.code}">
-					<h:outputText value="#{product.code}" />
+				<p:column headerText="idPelicula" sortBy="#{pelicula.idPeliculas}"
+					filterBy="#{pelicula.idPeliculas}">
+					<h:outputText value="#{pelicula.idPeliculas}" />
 				</p:column>
-				<p:column headerText="Nombre" sortBy="#{product.name}"
-					filterBy="#{product.name}">
-					<h:outputText value="#{product.name}" />
+				<p:column headerText="Nombre" sortBy="#{pelicula.nombre}"
+					filterBy="#{pelicula.nombre}">
+					<h:outputText value="#{pelicula.nombre}" />
 				</p:column>
-				<p:column headerText="Género" sortBy="#{product.category}"
-					filterBy="#{product.category}">
-					<h:outputText value="#{product.category}" />
+				<p:column headerText="Género" sortBy="#{pelicula.genero}"
+					filterBy="#{pelicula.genero}">
+					<h:outputText value="#{pelicula.genero}" />
 				</p:column>
 				<p:column exportable="false">
 					<p:commandButton icon="pi pi-pencil"
@@ -86,8 +87,8 @@
 						oncomplete="PF('manageProductDialog').show()"
 						styleClass="edit-button rounded-button ui-button-success"
 						process="@this">
-						<f:setPropertyActionListener value="#{product}"
-							target="#{crudView.selectedProduct}" />
+						<f:setPropertyActionListener value="#{pelicula}"
+							target="#{peliculasBean.seleccionado}" />
 						<p:resetInput target=":dialogs:manage-product-content" />
 					</p:commandButton>
 				</p:column>
@@ -96,26 +97,26 @@
 		</h:form>
 
 		<h:form id="dialogs">
-			<p:dialog header="Administrar Películas" showEffect="fade" modal="true"
-				widgetVar="manageProductDialog" responsive="true">
+			<p:dialog header="Administrar Películas" showEffect="fade"
+				modal="true" widgetVar="manageProductDialog" responsive="true">
 				<p:outputPanel id="manage-product-content" class="ui-fluid">
-					<p:outputPanel rendered="#{not empty crudView.selectedProduct}">
+					<p:outputPanel rendered="#{not empty peliculasBean.seleccionado}">
 						<div class="field">
-							<p:outputLabel for="name">Nombre de la película</p:outputLabel>
-							<p:inputText id="name" value="#{crudView.selectedProduct.name}"
-								required="true" />
+							<p:outputLabel for="nombre">Nombre de la película</p:outputLabel>
+							<p:inputText id="nombre"
+								value="#{peliculasBean.seleccionado.nombre}" required="true" />
 						</div>
 						<div class="field">
 							<p:outputLabel for="genero">Género de la película</p:outputLabel>
-							<p:inputText id="genero" value="#{crudView.selectedProduct.name}"
-								required="true" />
-						</div>			
+							<p:inputText id="genero"
+								value="#{peliculasBean.seleccionado.genero}" required="true" />
+						</div>
 					</p:outputPanel>
 				</p:outputPanel>
 
 				<f:facet name="footer">
 					<p:commandButton value="Save" icon="pi pi-check"
-						actionListener="#{crudView.saveProduct}"
+						actionListener="#{peliculasBean.agregar}"
 						update="manage-product-content"
 						process="manage-product-content @this" />
 					<p:commandButton value="Cancel" icon="pi pi-times"
@@ -124,18 +125,6 @@
 				</f:facet>
 			</p:dialog>
 
-			<p:confirmDialog widgetVar="deleteProductDialog" showEffect="fade"
-				width="300" message="Delete the product?" header="Confirm"
-				severity="warn">
-				<p:commandButton value="Yes" icon="pi pi-check"
-					actionListener="#{crudView.deleteProduct}" process="@this"
-					update=":form:delete-products-button"
-					oncomplete="PF('deleteProductDialog').hide()" />
-				<p:commandButton value="No" type="button"
-					styleClass="ui-button-secondary" icon="pi pi-times"
-					onclick="PF('deleteProductDialog').hide()" />
-			</p:confirmDialog>
-			
 			<p:confirmDialog global="true" showEffect="fade" width="300">
 				<p:commandButton value="Yes" type="button"
 					styleClass="ui-confirmdialog-yes" icon="pi pi-check" />
@@ -144,6 +133,13 @@
 					icon="pi pi-times" />
 			</p:confirmDialog>
 		</h:form>
+		<div class="flex align-items-center justify-content-center">
+			<div class="card" style="width: 40%; height: 40%">
+				<p:lineChart id="generopelis" model="#{peliculasBean.lineModel}"
+					style="width: 100%; height: 500px;" widgetVar="chart" />
+				<br />
+			</div>
+		</div>
 	</div>
 </h:body>
 </html>

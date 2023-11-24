@@ -15,38 +15,34 @@
 			<p:growl id="messages" showDetail="true" />
 			<p:toolbar>
 				<p:toolbarGroup>
-					<p:commandButton value="New" icon="pi pi-plus"
-						actionListener="#{crudView.openNew}"
+					<p:commandButton value="Nuevo" icon="pi pi-plus"
+						actionListener="#{nominaBean.nuevo}"
 						update=":dialogs:manage-product-content"
 						oncomplete="PF('manageProductDialog').show()"
 						styleClass="ui-button-success" style="margin-right: .5rem">
 						<p:resetInput target=":dialogs:manage-product-content" />
 					</p:commandButton>
 					<p:commandButton id="delete-products-button"
-						value="#{crudView.deleteButtonMessage}" icon="pi pi-trash"
-						actionListener="#{crudView.deleteSelectedProducts}"
+						value="#{nominaBean.deleteButtonMessage}" icon="pi pi-trash"
+						actionListener="#{nominaBean.deleteSelected}"
 						styleClass="ui-button-danger"
-						disabled="#{!crudView.hasSelectedProducts()}" update="@this">
+						disabled="#{!nominaBean.haySelec()}" update="@this">
 						<p:confirm header="Confirmation"
-							message="Delete the selected products?"
+							message="¿Desea eliminar las nóminas seleccionadas?"
 							icon="pi pi-exclamation-triangle" />
 					</p:commandButton>
 				</p:toolbarGroup>
 				<p:toolbarGroup align="right">
-					<p:fileUpload mode="simple" skinSimple="true" label="Import"
+					<p:fileUpload mode="simple" skinSimple="true" label="Cargar Archivos"
 						chooseIcon="pi pi-download" />
-					<p:commandButton value="Export" icon="pi pi-upload"
-						styleClass="ui-button-help" ajax="false">
-						<p:dataExporter type="pdf" target="dt-products"
-							fileName="products" />
-					</p:commandButton>
+					
 				</p:toolbarGroup>
 			</p:toolbar>
 
-			<p:dataTable id="dt-products" widgetVar="dtProducts" var="product"
-				value="#{crudView.products}" reflow="true"
-				styleClass="products-table" selection="#{crudView.selectedProducts}"
-				rowKey="#{product.id}" paginator="true" rows="10"
+			<p:dataTable id="dt-products" widgetVar="dtProducts" var="nomina"
+				value="#{nominaBean.nominas}" reflow="true"
+				styleClass="products-table" selection="#{nominaBean.seleccionados}"
+				rowKey="#{nomina.id}" paginator="true" rows="10"
 				rowSelectMode="add" paginatorPosition="bottom">
 				<f:facet name="header">
 					<div class="products-table-header">
@@ -68,51 +64,56 @@
 
 				<p:column selectionMode="multiple" exportable="false"></p:column>
 
-				<p:column headerText="idNomina" sortBy="#{product.code}"
-					filterBy="#{product.code}">
-					<h:outputText value="#{product.code}" />
+				<p:column headerText="idNomina" sortBy="#{nomina.id}"
+					filterBy="#{nomina.id}">
+					<h:outputText value="#{nomina.id}" />
 				</p:column>
-				<p:column headerText="idEmpleado" sortBy="#{product.name}"
-					filterBy="#{product.name}">
-					<h:outputText value="#{product.name}" />
+				<p:column headerText="Novedad incapacidad" sortBy="#{nomina.novedadIncapacidad}">
+					<h:outputText value="#{nomina.novedadIncapacidad}" />
 				</p:column>
-
-				<p:column headerText="DiasTrabajados" sortBy="#{product.category}">
-					<h:outputText value="#{product.category}" />
+				<p:column headerText="Novedad vacaciones" sortBy="#{nomina.novedadVacaciones}">
+					<h:outputText value="#{nomina.novedadVacaciones}" />
 				</p:column>
-				<p:column headerText="DiasVacacion" sortBy="#{product.category}">
-					<h:outputText value="#{product.category}" />
+				<p:column headerText="Dias trabajados" sortBy="#{nomina.diasTrabajados}"
+					filterBy="#{nomina.diasTrabajados}">
+					<h:outputText value="#{nomina.diasTrabajados}" />
 				</p:column>
-				<p:column headerText="InicioVacacion" sortBy="#{product.category}"
-					filterBy="#{product.category}">
-					<h:outputText value="#{product.category}" />
+				<p:column headerText="Dias incapacidad" sortBy="#{nomina.diasIncapacidad}"
+					filterBy="#{nomina.diasIncapacidad}">
+					<h:outputText value="#{nomina.diasIncapacidad}" />
 				</p:column>
-				<p:column headerText="FinVacacion" sortBy="#{product.category}"
-					filterBy="#{product.category}">
-					<h:outputText value="#{product.category}" />
+				<p:column headerText="Dias vacaciones" sortBy="#{nomina.diasVacaciones}"
+					filterBy="#{nomina.diasVacaciones}">
+					<h:outputText value="#{nomina.diasVacaciones}" />
 				</p:column>
-				<p:column headerText="InicioIncapac" sortBy="#{product.category}"
-					filterBy="#{product.category}">
-					<h:outputText value="#{product.category}" />
+				<p:column headerText="Inicio vacaciones" sortBy="#{nomina.inicioVacaciones}"
+					filterBy="#{nomina.inicioVacaciones}">
+					<h:outputText value="#{nomina.inicioVacaciones}" />
 				</p:column>
-				<p:column headerText="FinIncapac" sortBy="#{product.category}"
-					filterBy="#{product.category}">
-					<h:outputText value="#{product.category}" />
+				<p:column headerText="Terminacion vacaciones" sortBy="#{nomina.terminacionVacaciones}">
+					<h:outputText value="#{nomina.terminacionVacaciones}" />
 				</p:column>
-				<p:column headerText="Bonificacion" sortBy="#{product.category}">
-					<h:outputText value="#{product.category}" />
+				<p:column headerText="Inicio incapacidad" sortBy="#{nomina.inicioIncapacidad}">
+					<h:outputText value="#{nomina.inicioIncapacidad}" />
 				</p:column>
-				<p:column headerText="Transporte" sortBy="#{product.category}">
-					<h:outputText value="#{product.category}" />
+				<p:column headerText="Terminacion incapacidad" sortBy="#{nomina.terminacionIncapacidad}">
+					<h:outputText value="#{nomina.terminacionIncapacidad}" />
+				</p:column>
+				<p:column headerText="Bonificacion" sortBy="#{nomina.bonificacion}">
+					<h:outputText value="#{nomina.bonificacion}" />
+				</p:column>
+				<p:column headerText="Transporte" sortBy="#{nomina.transporte}">
+					<h:outputText value="#{nomina.transporte}" />
 				</p:column>
 				<p:column exportable="false">
 					<p:commandButton icon="pi pi-pencil"
 						update=":dialogs:manage-product-content"
 						oncomplete="PF('manageProductDialog').show()"
+						actionListener="#{nominaBean.agregarEmp}"
 						styleClass="edit-button rounded-button ui-button-success"
 						process="@this">
-						<f:setPropertyActionListener value="#{product}"
-							target="#{crudView.selectedProduct}" />
+						<f:setPropertyActionListener value="#{nomina}"
+							target="#{nominaBean.nomisel}" />
 						<p:resetInput target=":dialogs:manage-product-content" />
 					</p:commandButton>
 				</p:column>
@@ -124,31 +125,55 @@
 			<p:dialog header="Administrar Nómina" showEffect="fade" modal="true"
 				widgetVar="manageProductDialog" responsive="true">
 				<p:outputPanel id="manage-product-content" class="ui-fluid">
-					<p:outputPanel rendered="#{not empty crudView.selectedProduct}">
+					<p:outputPanel rendered="#{not empty nominaBean.nomisel}">
 						<div class="formgrid grid">
 							<div class="field col-12 md:col-6">
 								<p:outputLabel for="iniciov">Inicio Vacaciones</p:outputLabel>
-								<p:datePicker id="iniciov" value="" required="true" />
+								<p:datePicker id="iniciov" value="#{nominaBean.nomisel.inicioVacaciones}" required="true" />
 							</div>
 							<div class="field col-12 md:col-6">
 								<p:outputLabel for="finv">Fin Vacaciones</p:outputLabel>
-								<p:datePicker id="finv" value="" required="true" />
+								<p:datePicker id="finv" value="#{nominaBean.nomisel.terminacionVacaciones}" required="true" />
 							</div>
 							<div class="field col-12 md:col-6">
 								<p:outputLabel for="inicioi">Inicio Incapacidad</p:outputLabel>
-								<p:datePicker id="inicioi" value="" required="true" />
+								<p:datePicker id="inicioi" value="#{nominaBean.nomisel.inicioIncapacidad}" required="true" />
 							</div>
 							<div class="field col-12 md:col-6">
 								<p:outputLabel for="fini">Fin Incapacidad</p:outputLabel>
-								<p:datePicker id="fini" value="" required="true" />
+								<p:datePicker id="fini" value="#{nominaBean.nomisel.terminacionIncapacidad}" required="true" />
 							</div>
 							<div class="field col-12 md:col-6">
 								<p:outputLabel for="bonif">Bonificación</p:outputLabel>
-								<p:inputNumber id="bonif" value="" required="true" />
+								<p:inputNumber id="bonif" value="#{nominaBean.nomisel.bonificacion}" required="true" />
 							</div>
 							<div class="field col-12 md:col-6">
 								<p:outputLabel for="transp">Transporte</p:outputLabel>
-								<p:inputNumber id="transp" value="" required="true" />
+								<p:inputNumber id="transp" value="#{nominaBean.nomisel.transporte}" required="true" />
+							</div>
+							<div class="field col-12 md:col-6">
+								<p:outputLabel for="nincap">NovedadIncapacidad</p:outputLabel>
+								<p:inputText id="nincap" value="#{nominaBean.nomisel.novedadIncapacidad}" required="true" />
+							</div>
+							<div class="field col-12 md:col-6">
+								<p:outputLabel for="nvaca">NovedadVacaciones</p:outputLabel>
+								<p:inputText id="nvaca" value="#{nominaBean.nomisel.novedadVacaciones}" required="true" />
+							</div>
+							<div class="field col-12 md:col-3">
+								<p:outputLabel for="idemp">Id del empleado</p:outputLabel>
+								<p:inputText id="idemp" value="#{nominaBean.nomisel.idEmpleado.codigo}" required="true" type ="number" />
+							</div>
+							<div class="field col-12 md:col-3">
+								<p:outputLabel for="dtrab">DiasTrabajados</p:outputLabel>
+								<p:inputText id="dtrab" value="#{nominaBean.nomisel.diasTrabajados}" required="true" type = "number" />
+							</div>
+							<div class="field col-12 md:col-3">
+								<p:outputLabel for="dincp">DiasIncapacidad</p:outputLabel>
+								<p:inputText id="dincp" value="#{nominaBean.nomisel.diasIncapacidad}" required="true" type ="number"/>
+							</div>
+							<div class="field col-12 md:col-3">
+								<p:outputLabel for="dvacac">DiasVacaciones</p:outputLabel>
+								<p:inputText id="dvacac" value="#{nominaBean.nomisel.diasVacaciones}" required="true" type ="number" />
 							</div>
 						</div>
 					</p:outputPanel>
@@ -156,7 +181,7 @@
 
 				<f:facet name="footer">
 					<p:commandButton value="Save" icon="pi pi-check"
-						actionListener="#{crudView.saveProduct}"
+						actionListener="#{nominaBean.agregar}"
 						update="manage-product-content"
 						process="manage-product-content @this" />
 					<p:commandButton value="Cancel" icon="pi pi-times"
@@ -169,7 +194,7 @@
 				width="300" message="Delete the product?" header="Confirm"
 				severity="warn">
 				<p:commandButton value="Yes" icon="pi pi-check"
-					actionListener="#{crudView.deleteProduct}" process="@this"
+					actionListener="#{nominaBean.deleteProduct}" process="@this"
 					update=":form:delete-products-button"
 					oncomplete="PF('deleteProductDialog').hide()" />
 				<p:commandButton value="No" type="button"

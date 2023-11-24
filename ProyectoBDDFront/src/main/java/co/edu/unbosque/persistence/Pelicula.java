@@ -21,11 +21,11 @@ public class Pelicula implements Serializable {
 		this.genero = genero;
 	}
 
-	public Integer getIdPelicula() {
+	public Integer getIdPeliculas() {
 		return idPeliculas;
 	}
 
-	public void setIdPelicula(Integer idPeliculas) {
+	public void setIdPeliculas(Integer idPeliculas) {
 		this.idPeliculas = idPeliculas;
 	}
 

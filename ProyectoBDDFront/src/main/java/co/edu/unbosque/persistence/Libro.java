@@ -30,12 +30,15 @@ public class Libro implements Serializable {
 	private String fechaPublicacion;
 
 	private String publicador;
+	
+	private String field13;
 
-	public Libro(@JsonProperty("idLibro") Integer idlibro, @JsonProperty("titulo") String titulo,
-			@JsonProperty("autores") String autores, @JsonProperty("rating") String rating,
+	public Libro(@JsonProperty("bookID") Integer idlibro, @JsonProperty("title") String titulo,
+			@JsonProperty("authors") String autores, @JsonProperty("average_rating") String rating,
 			@JsonProperty("isbn") String isbn, @JsonProperty("isbn13") String isbn13,
-			@JsonProperty("idioma") String idioma, @JsonProperty("paginas") String paginas, @JsonProperty("totalRatings") Integer totalRatings,
-			@JsonProperty("totalResenas") Integer totalResenas, @JsonProperty("fechaPublicacion") String fechaPublicacion, @JsonProperty("publicador") String publicador) {
+			@JsonProperty("language_code") String idioma, @JsonProperty("num_pages") String paginas, @JsonProperty("ratings_count") Integer totalRatings,
+			@JsonProperty("text_reviews_count") Integer totalResenas, @JsonProperty("publication_date") String fechaPublicacion, @JsonProperty("publisher") String publicador,
+			@JsonProperty("FIELD13") String field13) {
 		super();
 		this.idlibro = idlibro;
 		this.titulo = titulo;
@@ -49,6 +52,7 @@ public class Libro implements Serializable {
 		this.totalResenas = totalResenas;
 		this.fechaPublicacion = fechaPublicacion;
 		this.publicador = publicador;
+		this.field13 = field13;
 	}
 
 	public Integer getIdlibro() {
@@ -145,6 +149,14 @@ public class Libro implements Serializable {
 
 	public void setPublicador(String publicador) {
 		this.publicador = publicador;
+	}
+
+	public String getField13() {
+		return field13;
+	}
+
+	public void setField13(String field13) {
+		this.field13 = field13;
 	}
 
 }

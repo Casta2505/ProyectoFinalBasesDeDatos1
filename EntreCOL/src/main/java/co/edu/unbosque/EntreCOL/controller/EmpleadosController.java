@@ -3,7 +3,10 @@ package co.edu.unbosque.EntreCOL.controller;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Optional;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -11,6 +14,7 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -29,12 +33,9 @@ import co.edu.unbosque.EntreCOL.repository.NominaEmpleadosRepository;
 @CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/Empleados")
-
 public class EmpleadosController {
 	@Autowired
 	private EmpleadosRepository daoEmpleados;
-	@Autowired
-	private NominaEmpleadosRepository daoNominaEmpleado;
 
 	@PostMapping("/leer")
 	public ResponseEntity<String> leerArchivo(@RequestParam("file") MultipartFile file) {
@@ -52,7 +53,7 @@ public class EmpleadosController {
 					empleado.setNombre(row.getCell(1).getStringCellValue());
 					empleado.setDependencia(row.getCell(2).getStringCellValue());
 					empleado.setCargo(row.getCell(3).getStringCellValue());
-					String tmp = row.getCell(4).getStringCellValue();
+					String tmp = (row.getCell(4).getNumericCellValue() + "").replace(".","").replace("E7", "");
 					LocalDate fechaIngreso = LocalDate.of(Integer.parseInt(tmp.substring(0, 4)),
 							Integer.parseInt(tmp.substring(4, 6)), Integer.parseInt(tmp.substring(6)));
 					empleado.setFechaIngreso(fechaIngreso);
@@ -60,11 +61,11 @@ public class EmpleadosController {
 					empleado.setArl(row.getCell(6).getStringCellValue());
 					empleado.setPension(row.getCell(7).getStringCellValue());
 					empleado.setSueldo(row.getCell(8).getNumericCellValue());
+					empleado.setNominas(new ArrayList<>());
 					empleados.add(empleado);
 				}
 				daoEmpleados.saveAll(empleados);
 				Sheet sheet2 = workbook.getSheetAt(1);
-				List<NominaEmpleado> nominas = new ArrayList<>();
 				for (int i = 1; i < sheet2.getPhysicalNumberOfRows(); i++) {
 					Row row = sheet2.getRow(i);
 					int codigo = (int) row.getCell(0).getNumericCellValue();
@@ -77,28 +78,20 @@ public class EmpleadosController {
 						nomina.setDiasTrabajados((int) row.getCell(3).getNumericCellValue());
 						nomina.setDiasIncapacidad((int) row.getCell(4).getNumericCellValue());
 						nomina.setDiasVacaciones((int) row.getCell(5).getNumericCellValue());
-						String tmp = row.getCell(6).getStringCellValue();
-						LocalDate fecha = LocalDate.of(Integer.parseInt(tmp.substring(0, 4)),
-								Integer.parseInt(tmp.substring(4, 6)), Integer.parseInt(tmp.substring(6)));
-						nomina.setInicioVacaciones(fecha);
-						tmp = row.getCell(7).getStringCellValue();
-						fecha = LocalDate.of(Integer.parseInt(tmp.substring(0, 4)),
-								Integer.parseInt(tmp.substring(4, 6)), Integer.parseInt(tmp.substring(6)));
-						nomina.setTerminacionVacaciones(fecha);
-						tmp = row.getCell(8).getStringCellValue();
-						fecha = LocalDate.of(Integer.parseInt(tmp.substring(0, 4)),
-								Integer.parseInt(tmp.substring(4, 6)), Integer.parseInt(tmp.substring(6)));
-						nomina.setInicioIncapacidad(fecha);
-						tmp = row.getCell(9).getStringCellValue();
-						fecha = LocalDate.of(Integer.parseInt(tmp.substring(0, 4)),
-								Integer.parseInt(tmp.substring(4, 6)), Integer.parseInt(tmp.substring(6)));
-						nomina.setTerminacionIncapacidad(fecha);
+						if(null != row.getCell(6).getLocalDateTimeCellValue())
+						nomina.setInicioVacaciones(row.getCell(6).getLocalDateTimeCellValue().toLocalDate());
+						if(null != row.getCell(7).getLocalDateTimeCellValue())
+						nomina.setTerminacionVacaciones(row.getCell(7).getLocalDateTimeCellValue().toLocalDate());
+						if(null != row.getCell(8).getLocalDateTimeCellValue())
+						nomina.setInicioIncapacidad(row.getCell(8).getLocalDateTimeCellValue().toLocalDate());
+						if(null != row.getCell(9).getLocalDateTimeCellValue())
+						nomina.setTerminacionIncapacidad(row.getCell(9).getLocalDateTimeCellValue().toLocalDate());
 						nomina.setBonificacion(row.getCell(10).getNumericCellValue());
 						nomina.setTransporte(row.getCell(11).getNumericCellValue());
-						nominas.add(nomina);
+						addNomina(empleado.getCodigo(), nomina);
 					}
 				}
-				daoNominaEmpleado.saveAll(nominas);
+
 			}
 			return ResponseEntity.status(HttpStatus.ACCEPTED).body("Archivo procesado con exito");
 		} catch (IOException e) {
@@ -114,13 +107,12 @@ public class EmpleadosController {
 		return false;
 	}
 
-	@GetMapping("/listar")
+	@GetMapping(path = "/listar")
 	public ResponseEntity<List<Empleados>> getAll() {
 
 		List<Empleados> lista = daoEmpleados.findAll();
-
 		if (lista.isEmpty()) {
-			return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+			return ResponseEntity.status(HttpStatus.NO_CONTENT).body(lista);
 		}
 		return ResponseEntity.status(HttpStatus.FOUND).body(lista);
 
@@ -147,6 +139,7 @@ public class EmpleadosController {
 			ag.setNombre(nombre);
 			ag.setPension(pension);
 			ag.setSueldo(sueldo);
+			ag.setNominas(new ArrayList<>());
 
 			daoEmpleados.save(ag);
 
@@ -154,7 +147,62 @@ public class EmpleadosController {
 		}
 
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No creado");
+	}
+	
+	@PutMapping("/agregarNomina")
+	public ResponseEntity<String> agregarN(@RequestParam Integer codempleado, @RequestParam boolean novedadIncapacidad, @RequestParam boolean novedadVacaciones,
+											@RequestParam Integer diasTrabajados, @RequestParam Integer diasIncapacidad, @RequestParam Integer diasVacaciones,
+											@RequestParam LocalDate inicioVacaciones, @RequestParam LocalDate terminacionVacaciones, @RequestParam LocalDate inicioIncapacidad,
+											@RequestParam LocalDate terminacionIncapacidad, @RequestParam Double bonificacion, @RequestParam Double transporte){
+		
+		Optional<Empleados> emp = daoEmpleados.findByCodigo(codempleado);
+		
+		if(emp.isPresent()) {
+			
+			NominaEmpleado ag = new NominaEmpleado();
+			
+			ag.setBonificacion(bonificacion);
+			ag.setDiasIncapacidad(diasIncapacidad);
+			ag.setDiasTrabajados(diasTrabajados);
+			ag.setDiasVacaciones(diasVacaciones);
+			ag.setIdEmpleado(emp.get());
+			ag.setInicioIncapacidad(inicioIncapacidad);
+			ag.setInicioVacaciones(inicioVacaciones);
+			ag.setNovedadIncapacidad(novedadIncapacidad);
+			ag.setNovedadVacaciones(novedadVacaciones);
+			ag.setTerminacionIncapacidad(terminacionIncapacidad);
+			ag.setTerminacionVacaciones(terminacionVacaciones);
+			ag.setTransporte(transporte);
+			
+			addNomina(codempleado, ag);
+			
+			return ResponseEntity.status(HttpStatus.CREATED).body("Creado (201)");
+		}
+		
+		return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No creado");
+		
+	}
 
+	public ResponseEntity<String> addNomina(@RequestParam Integer codigo, @RequestParam NominaEmpleado nom){
+		
+		try {
+			Optional<Empleados> tmp = daoEmpleados.findByCodigo(codigo);
+			
+			if(!tmp.isPresent()) {
+				return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Not found 404");
+			}
+			
+			Empleados emp = tmp.get();
+			List<NominaEmpleado> lis = emp.getNominas();
+			lis.add(nom);
+			emp.setNominas(lis);
+			daoEmpleados.save(emp);
+			return ResponseEntity.status(HttpStatus.ACCEPTED).body("Created qith nomina 202");
+			 
+		}catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.CONFLICT).body("409");
+		}
+		
 	}
 
 	@PutMapping("/actualizar")
@@ -211,6 +259,7 @@ public class EmpleadosController {
 		if (!aux.isPresent()) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
 		}
+		System.out.println(aux.get());
 		return ResponseEntity.status(HttpStatus.FOUND).body(aux.get());
 
 	}

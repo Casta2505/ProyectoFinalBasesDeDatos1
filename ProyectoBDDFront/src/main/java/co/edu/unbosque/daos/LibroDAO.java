@@ -1,8 +1,9 @@
 package co.edu.unbosque.daos;
 
 import java.io.File;
-import java.util.Arrays;
 import java.util.List;
+
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -13,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
+
 import co.edu.unbosque.persistence.Libro;
 
 public class LibroDAO {
@@ -41,15 +43,21 @@ public class LibroDAO {
 
 	public List<Libro> listar() {
 		try {
-			String url = URL + "listar";
-			ResponseEntity<Libro[]> response = restTemplate.getForEntity(url, Libro[].class);
-			if (response.getStatusCode().equals(HttpStatus.FOUND)) {
-				return Arrays.asList(response.getBody());
-			}
-		} catch (Exception e) {
-			return null;
-		}
-		return null;
+	        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(URL+"listar");
+	        String url = builder.toUriString();
+	        ResponseEntity<List<Libro>> response = restTemplate.exchange(
+	            url,
+	            HttpMethod.GET,
+	            null,
+	            new ParameterizedTypeReference<List<Libro>>() {}
+	        );
+	        if (response.getStatusCode().equals(HttpStatus.ACCEPTED)){
+	            return response.getBody();
+	        }
+	    } catch (Exception e) {
+	        e.printStackTrace(); // Imprime la excepción para debug
+	    }
+	    return null;
 	}
 
 	public String add(Integer idlibro, String autores,
@@ -58,6 +66,7 @@ public class LibroDAO {
 			Integer totalResenas, String fechaPublicacion, String publicador,
 			String titulo) {
 		try {
+			System.out.println("entra");
 			UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(URL + "agregar");
 			builder.queryParam("idlibro", idlibro);
 			builder.queryParam("autores", autores);

@@ -43,7 +43,7 @@ public class PeliculaDAO {
 		try {
 			String url = URL+"listar";
 			ResponseEntity<Pelicula[]> response = restTemplate.getForEntity(url, Pelicula[].class);
-			if (response.getStatusCode().equals(HttpStatus.FOUND)) {
+			if (response.getStatusCode().equals(HttpStatus.ACCEPTED)) {
 				return Arrays.asList(response.getBody());
 			}
 		} catch (Exception e) {
