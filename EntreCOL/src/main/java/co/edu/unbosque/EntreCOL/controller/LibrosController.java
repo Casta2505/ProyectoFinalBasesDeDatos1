@@ -36,7 +36,7 @@ public class LibrosController {
 			return ResponseEntity.status(HttpStatus.NO_CONTENT).body("Por favor seleccione un archivo para subir");
 		}
 		ObjectMapper objectMapper = new ObjectMapper();
-		try {
+		try {	
 			List<Libros> libros = Arrays.asList(objectMapper.readValue(file.getBytes(), Libros[].class));
 			daoLibros.saveAll(libros);
 			return ResponseEntity.status(HttpStatus.ACCEPTED).body("Archivo procesado con exito");
@@ -66,10 +66,9 @@ public class LibrosController {
 			@RequestParam String titulo) {
 
 		Optional<Libros> aux = daoLibros.findById(idlibro);
+		
 
-		if (aux.isPresent()) {
-
-			daoLibros.delete(aux.get());
+		if (!aux.isPresent()) {
 
 			Libros ag = new Libros();
 
@@ -85,6 +84,7 @@ public class LibrosController {
 			ag.setTitulo(titulo);
 			ag.setTotalRatings(totalRatings);
 			ag.setTotalResenas(totalResenas);
+			ag.setFIELD13("");
 
 			daoLibros.save(ag);
 

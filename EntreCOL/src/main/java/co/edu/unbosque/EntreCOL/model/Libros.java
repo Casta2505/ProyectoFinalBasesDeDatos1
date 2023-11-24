@@ -51,6 +51,9 @@ public class Libros {
 	@JsonProperty("publisher")
 	private String publicador;
 
+	@JsonProperty("FIELD13")
+	private String FIELD13;
+
 	public Integer getIdlibro() {
 		return idlibro;
 	}
@@ -146,4 +149,13 @@ public class Libros {
 	public void setPublicador(String publicador) {
 		this.publicador = publicador;
 	}
+
+	public String getFIELD13() {
+		return FIELD13;
+	}
+
+	public void setFIELD13(String fIELD13) {
+		FIELD13 = fIELD13;
+	}
+	
 }

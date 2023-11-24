@@ -33,13 +33,9 @@ import co.edu.unbosque.EntreCOL.repository.NominaEmpleadosRepository;
 @CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/Empleados")
-
 public class EmpleadosController {
 	@Autowired
 	private EmpleadosRepository daoEmpleados;
-	
-	@Autowired
-	private NominaEmpleadosRepository daoNom;
 
 	@PostMapping("/leer")
 	public ResponseEntity<String> leerArchivo(@RequestParam("file") MultipartFile file) {
@@ -111,13 +107,12 @@ public class EmpleadosController {
 		return false;
 	}
 
-	@GetMapping("/listar")
+	@GetMapping(path = "/listar")
 	public ResponseEntity<List<Empleados>> getAll() {
 
 		List<Empleados> lista = daoEmpleados.findAll();
-
 		if (lista.isEmpty()) {
-			return ResponseEntity.status(HttpStatus.NO_CONTENT).body(null);
+			return ResponseEntity.status(HttpStatus.NO_CONTENT).body(lista);
 		}
 		return ResponseEntity.status(HttpStatus.FOUND).body(lista);
 
@@ -156,7 +151,7 @@ public class EmpleadosController {
 	}
 	
 	@PutMapping("/agregarNomina")
-	public ResponseEntity<String> agregar(@RequestParam Integer codempleado, @RequestParam boolean novedadIncapacidad, @RequestParam boolean novedadVacaciones,
+	public ResponseEntity<String> agregarN(@RequestParam Integer codempleado, @RequestParam boolean novedadIncapacidad, @RequestParam boolean novedadVacaciones,
 											@RequestParam Integer diasTrabajados, @RequestParam Integer diasIncapacidad, @RequestParam Integer diasVacaciones,
 											@RequestParam LocalDate inicioVacaciones, @RequestParam LocalDate terminacionVacaciones, @RequestParam LocalDate inicioIncapacidad,
 											@RequestParam LocalDate terminacionIncapacidad, @RequestParam Double bonificacion, @RequestParam Double transporte){
@@ -201,14 +196,11 @@ public class EmpleadosController {
 			Empleados emp = tmp.get();
 			List<NominaEmpleado> lis = emp.getNominas();
 			lis.add(nom);
-			System.out.println(lis);
 			emp.setNominas(lis);
 			daoEmpleados.save(emp);
 			return ResponseEntity.status(HttpStatus.ACCEPTED).body("Created qith nomina 202");
 			 
 		}catch (Exception e) {
-			// TODO: handle exception
-			e.printStackTrace();
 			return ResponseEntity.status(HttpStatus.CONFLICT).body("409");
 		}
 		
@@ -268,6 +260,7 @@ public class EmpleadosController {
 		if (!aux.isPresent()) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
 		}
+		System.out.println(aux.get());
 		return ResponseEntity.status(HttpStatus.FOUND).body(aux.get());
 
 	}

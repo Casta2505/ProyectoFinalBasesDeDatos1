@@ -2,7 +2,12 @@ package co.edu.unbosque.persistence;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
+
+import jakarta.enterprise.context.RequestScoped;
+import jakarta.inject.Named;
 
 @SuppressWarnings("serial")
 public class Nomina implements Serializable {
@@ -21,12 +26,16 @@ public class Nomina implements Serializable {
 
 	private Integer diasVacaciones;
 
+	@JsonFormat(pattern = "yyyy-MM-dd")
 	private LocalDate inicioVacaciones;
 
+	@JsonFormat(pattern = "yyyy-MM-dd")
 	private LocalDate terminacionVacaciones;
 
+	@JsonFormat(pattern = "yyyy-MM-dd")
 	private LocalDate inicioIncapacidad;
 
+	@JsonFormat(pattern = "yyyy-MM-dd")
 	private LocalDate terminacionIncapacidad;
 
 	private Double bonificacion;
@@ -54,7 +63,7 @@ public class Nomina implements Serializable {
 		this.diasVacaciones = diasVacaciones;
 		this.inicioVacaciones = inicioVacaciones;
 		this.terminacionVacaciones = terminacionVacaciones;
-		this.inicioIncapacidad = inicioIncapacidad;
+		this.inicioIncapacidad  = inicioIncapacidad;
 		this.terminacionIncapacidad = terminacionIncapacidad;
 		this.bonificacion = bonificacion;
 		this.transporte = transporte;
@@ -162,6 +171,10 @@ public class Nomina implements Serializable {
 
 	public void setTransporte(Double transporte) {
 		this.transporte = transporte;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
 	}
 
 }

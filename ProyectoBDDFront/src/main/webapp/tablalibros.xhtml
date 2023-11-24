@@ -16,37 +16,38 @@
 			<p:toolbar>
 				<p:toolbarGroup>
 					<p:commandButton value="Nuevo" icon="pi pi-plus"
-						actionListener="#{crudView.openNew}"
+						actionListener="#{libroBean.nuevo}"
 						update=":dialogs:manage-product-content"
 						oncomplete="PF('manageProductDialog').show()"
 						styleClass="ui-button-success" style="margin-right: .5rem">
 						<p:resetInput target=":dialogs:manage-product-content" />
 					</p:commandButton>
 					<p:commandButton id="delete-products-button"
-						value="#{crudView.deleteButtonMessage}" icon="pi pi-trash"
-						actionListener="#{crudView.deleteSelectedProducts}"
+						value="#{libroBean.deleteButtonMessage}" icon="pi pi-trash"
+						actionListener="#{libroBean.deleteSelected}"
 						styleClass="ui-button-danger"
-						disabled="#{!crudView.hasSelectedProducts()}" update="@this">
+						disabled="#{!libroBean.haySelec()}" update="@this">
 						<p:confirm header="Confirmation"
-							message="Delete the selected products?"
+							message="¿Desea eliminar los libros seleccionados?"
 							icon="pi pi-exclamation-triangle" />
 					</p:commandButton>
 				</p:toolbarGroup>
 				<p:toolbarGroup align="right">
-					<p:fileUpload mode="simple" skinSimple="true" label="Cargar archivos"
-						chooseIcon="pi pi-download" />
+					<p:fileUpload mode="simple" skinSimple="true" label="Cargar archivos" auto="true"
+						chooseIcon="pi pi-download" listener = "#{libroBean.leer}"
+							process="@this"/>
 					<p:commandButton value="Exportar Gráfica" icon="pi pi-upload"
 						styleClass="ui-button-help" ajax="false">
 						<p:printer target="librosano"
-							title="Gráfico" />
+							title="Grafico" />
 					</p:commandButton>
 				</p:toolbarGroup>
 			</p:toolbar>
 
-			<p:dataTable id="dt-products" widgetVar="dtProducts" var="product"
-				value="#{crudView.products}" reflow="true"
-				styleClass="products-table" selection="#{crudView.selectedProducts}"
-				rowKey="#{product.id}" paginator="true" rows="10"
+			<p:dataTable id="dt-products" widgetVar="dtProducts" var="libro"
+				value="#{libroBean.libros}" reflow="true"
+				styleClass="products-table" selection="#{libroBean.seleccionados}"
+				rowKey="#{libro.idlibro}" paginator="true" rows="10"
 				rowSelectMode="add" paginatorPosition="bottom">
 				<f:facet name="header">
 					<div class="products-table-header">
@@ -68,54 +69,54 @@
 
 				<p:column selectionMode="multiple" exportable="false"></p:column>
 
-				<p:column headerText="IdLibros" sortBy="#{product.code}"
-					filterBy="#{product.code}">
-					<h:outputText value="#{product.code}" />
+				<p:column headerText="IdLibro" sortBy="#{libro.idlibro}"
+					filterBy="#{libro.idlibro}">
+					<h:outputText value="#{libro.idlibro}" />
 				</p:column>
-				<p:column headerText="TituloLibro" sortBy="#{product.name}"
-					filterBy="#{product.name}">
-					<h:outputText value="#{product.name}" />
+				<p:column headerText="TituloLibro" sortBy="#{libro.titulo}"
+					filterBy="#{libro.titulo}">
+					<h:outputText value="#{libro.titulo}" />
 				</p:column>
 
-				<p:column headerText="Autor/es" sortBy="#{product.name}"
-					filterBy="#{product.name}">
-					<h:outputText value="#{product.name}" />
+				<p:column headerText="Autor/es" sortBy="#{libro.autores}"
+					filterBy="#{libro.autores}">
+					<h:outputText value="#{libro.autores}" />
 				</p:column>
-				<p:column headerText="Ratings" sortBy="#{product.category}"
-					filterBy="#{product.category}">
-					<h:outputText value="#{product.category}" />
+				<p:column headerText="Ratings" sortBy="#{libro.rating}"
+					filterBy="#{libro.rating}">
+					<h:outputText value="#{libro.rating}" />
 				</p:column>
-				<p:column headerText="ISBN(Code)" sortBy="#{product.category}"
-					filterBy="#{product.category}">
-					<h:outputText value="#{product.category}" />
+				<p:column headerText="ISBN(Code)" sortBy="#{libro.isbn}"
+					filterBy="#{libro.isbn}">
+					<h:outputText value="#{libro.isbn}" />
 				</p:column>
-				<p:column headerText="ISBN13" sortBy="#{product.category}"
-					filterBy="#{product.category}">
-					<h:outputText value="#{product.category}" />
+				<p:column headerText="ISBN13" sortBy="#{libro.isbn13}"
+					filterBy="#{libro.isbn13}">
+					<h:outputText value="#{libro.isbn13}" />
 				</p:column>
-				<p:column headerText="Idiomas" sortBy="#{product.category}"
-					filterBy="#{product.category}">
-					<h:outputText value="#{product.category}" />
+				<p:column headerText="Idiomas" sortBy="#{libro.idioma}"
+					filterBy="#{libro.idioma}">
+					<h:outputText value="#{libro.idioma}" />
 				</p:column>
-				<p:column headerText="Páginas" sortBy="#{product.category}"
-					filterBy="#{product.category}">
-					<h:outputText value="#{product.category}" />
+				<p:column headerText="Páginas" sortBy="#{libro.paginas}"
+					filterBy="#{libro.paginas}">
+					<h:outputText value="#{libro.paginas}" />
 				</p:column>
-				<p:column headerText="RatingsTotales" sortBy="#{product.category}"
-					filterBy="#{product.category}">
-					<h:outputText value="#{product.category}" />
+				<p:column headerText="RatingsTotales" sortBy="#{libro.totalRatings}"
+					filterBy="#{libro.totalRatings}">
+					<h:outputText value="#{libro.totalRatings}" />
 				</p:column>
-				<p:column headerText="Reseñas" sortBy="#{product.category}"
-					filterBy="#{product.category}">
-					<h:outputText value="#{product.category}" />
+				<p:column headerText="Reseñas" sortBy="#{libro.totalResenas}"
+					filterBy="#{libro.totalResenas}">
+					<h:outputText value="#{libro.totalResenas}" />
 				</p:column>
-				<p:column headerText="Publicación" sortBy="#{product.category}"
-					filterBy="#{product.category}">
-					<h:outputText value="#{product.category}" />
+				<p:column headerText="Publicación" sortBy="#{libro.fechaPublicacion}"
+					filterBy="#{libro.fechaPublicacion}">
+					<h:outputText value="#{libro.fechaPublicacion}" />
 				</p:column>
-				<p:column headerText="Publicador" sortBy="#{product.category}"
-					filterBy="#{product.category}">
-					<h:outputText value="#{product.category}" />
+				<p:column headerText="Publicador" sortBy="#{libro.publicador}"
+					filterBy="#{libro.publicador}">
+					<h:outputText value="#{libro.publicador}" />
 				</p:column>
 				<p:column exportable="false">
 					<p:commandButton icon="pi pi-pencil"
@@ -123,8 +124,8 @@
 						oncomplete="PF('manageProductDialog').show()"
 						styleClass="edit-button rounded-button ui-button-success"
 						process="@this">
-						<f:setPropertyActionListener value="#{product}"
-							target="#{crudView.selectedProduct}" />
+						<f:setPropertyActionListener value="#{libro}"
+							target="#{libroBean.seleccionado}" />
 						<p:resetInput target=":dialogs:manage-product-content" />
 					</p:commandButton>
 				</p:column>
@@ -136,43 +137,58 @@
 			<p:dialog header="Administrar Libros" showEffect="fade" modal="true"
 				widgetVar="manageProductDialog" responsive="true">
 				<p:outputPanel id="manage-product-content" class="ui-fluid">
-					<p:outputPanel rendered="#{not empty crudView.selectedProduct}">
+					<p:outputPanel rendered="#{not empty libroBean.seleccionado}">
 						<div class="formgrid grid">
 							<div class="field col-12">
 								<p:outputLabel for="titulo">Titulo</p:outputLabel>
-								<p:inputText id="titulo" value="" required="true" />
+								<p:inputText id="titulo" value="#{libroBean.seleccionado.titulo}" required="true" />
 							</div>
 							<div class="field col-12 md:col-6">
 								<p:outputLabel for="isbn">ISBN</p:outputLabel>
-								<p:inputText id="isbn" value="" required="true" />
+								<p:inputText id="isbn" value="#{libroBean.seleccionado.isbn}" required="true" />
+							</div>
+							<div class="field col-12 md:col-6">
+								<p:outputLabel for="autores">Autores</p:outputLabel>
+								<p:inputText id="autores" value="#{libroBean.seleccionado.autores}" required="true" />
+							</div>
+							<div class="field col-12 md:col-6">
+								<p:outputLabel for="rating">Rating</p:outputLabel>
+								<p:inputText id="rating" value="#{libroBean.seleccionado.rating}" required="true" />
+							</div>
+							<div class="field col-12 md:col-6">
+								<p:outputLabel for="trating">TotalRatings</p:outputLabel>
+								<p:inputText id="trating" value="#{libroBean.seleccionado.totalRatings}" required="true" type="number" />
+							</div>
+							<div class="field col-12 md:col-6">
+								<p:outputLabel for="tresenas">TotalReseñas</p:outputLabel>
+								<p:inputText id="tresenas" value="#{libroBean.seleccionado.totalResenas}" required="true" type="number"/>
 							</div>
 							<div class="field col-12 md:col-6">
 								<p:outputLabel for="isbn13">ISBN13</p:outputLabel>
-								<p:inputText id="isbn13" value="" required="true" />
+								<p:inputText id="isbn13" value="#{libroBean.seleccionado.isbn13}" required="true" />
 							</div>
 							<div class="field col-12 md:col-3">
 								<p:outputLabel for="idioma">Idioma del libro</p:outputLabel>
-								<p:inputText id="idioma" value="" required="true" />
+								<p:inputText id="idioma" value="#{libroBean.seleccionado.idioma}" required="true" />
 							</div>
 							<div class="field col-12 md:col-3">
 								<p:outputLabel for="publi">Publicador</p:outputLabel>
-								<p:inputText id="publi" value="" required="true" />
+								<p:inputText id="publi" value="#{libroBean.seleccionado.publicador}" required="true" />
 							</div>
 							<div class="field col-12 md:col-3">
 								<p:outputLabel for="npags">Número de páginas</p:outputLabel>
-								<p:inputNumber id="npags" value="" required="true" />
+								<p:inputText id="npags" value="#{libroBean.seleccionado.paginas}" required="true" />
 							</div>
 							<div class="field col-12 md:col-3">
 								<p:outputLabel for="fpubli">Fecha de publicación</p:outputLabel>
-								<p:datePicker id="fpubli" value="" required="true" />
+								<p:inputText id="fpubli" value="#{libroBean.seleccionado.fechaPublicacion}" required="true" />
 							</div>
 						</div>
 					</p:outputPanel>
 				</p:outputPanel>
-
 				<f:facet name="footer">
 					<p:commandButton value="Save" icon="pi pi-check"
-						actionListener="#{crudView.saveProduct}"
+						actionListener="#{libroBean.agregar}"
 						update="manage-product-content"
 						process="manage-product-content @this" />
 					<p:commandButton value="Cancel" icon="pi pi-times"
@@ -181,17 +197,6 @@
 				</f:facet>
 			</p:dialog>
 
-			<p:confirmDialog widgetVar="deleteProductDialog" showEffect="fade"
-				width="300" message="Delete the product?" header="Confirm"
-				severity="warn">
-				<p:commandButton value="Yes" icon="pi pi-check"
-					actionListener="#{crudView.deleteProduct}" process="@this"
-					update=":form:delete-products-button"
-					oncomplete="PF('deleteProductDialog').hide()" />
-				<p:commandButton value="No" type="button"
-					styleClass="ui-button-secondary" icon="pi pi-times"
-					onclick="PF('deleteProductDialog').hide()" />
-			</p:confirmDialog>
 
 			<p:confirmDialog global="true" showEffect="fade" width="300">
 				<p:commandButton value="Yes" type="button"
@@ -203,7 +208,7 @@
 		</h:form>
 		<div class="flex align-items-center justify-content-center">
 			<div class="card" style="width: 40%; height: 40%">
-				<p:lineChart id="librosano" model="#{charView.lineModel}"
+				<p:lineChart id="librosano" model="#{libroBean.lineModel}"
 					style="width: 100%; height: 500px;" widgetVar="chart" />
 				<br />
 			</div>

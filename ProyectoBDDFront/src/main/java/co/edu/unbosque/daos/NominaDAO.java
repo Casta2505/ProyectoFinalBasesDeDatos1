@@ -22,7 +22,7 @@ public class NominaDAO {
 		try {
 			String url = URL + "listar";
 			ResponseEntity<Nomina[]> response = restTemplate.getForEntity(url, Nomina[].class);
-			if (response.getStatusCode().equals(HttpStatus.FOUND)) {
+			if (response.getStatusCode().equals(HttpStatus.ACCEPTED)) {
 				return Arrays.asList(response.getBody());
 			}
 		} catch (Exception e) {

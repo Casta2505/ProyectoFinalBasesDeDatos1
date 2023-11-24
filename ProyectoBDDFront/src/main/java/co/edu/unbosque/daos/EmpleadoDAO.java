@@ -1,9 +1,12 @@
 package co.edu.unbosque.daos;
 
 import java.io.File;
+import java.nio.file.spi.FileSystemProvider;
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
+
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -14,6 +17,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
+
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import co.edu.unbosque.persistence.Empleado;
 
@@ -43,18 +49,24 @@ public class EmpleadoDAO {
 	}
 	
 	public List<Empleado> listar(){
-		try {
-			String url = URL+"listar";
-			ResponseEntity<Empleado[]> response = restTemplate.getForEntity(url, Empleado[].class);
-			if (response.getStatusCode().equals(HttpStatus.FOUND)) {
-				return Arrays.asList(response.getBody());
-			}
-		} catch (Exception e) {
-			return null;
-		}
-		return null;
-	}
-	
+    try {
+        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(URL+"listar");
+        String url = builder.toUriString();
+        ResponseEntity<List<Empleado>> response = restTemplate.exchange(
+            url,
+            HttpMethod.GET,
+            null,
+            new ParameterizedTypeReference<List<Empleado>>() {}
+        );
+        if (response.getStatusCode().equals(HttpStatus.FOUND)){
+            return response.getBody();
+        }
+    } catch (Exception e) {
+        e.printStackTrace(); // Imprime la excepción para debug
+    }
+    return null;
+}
+
 	public String add(Integer codigo, String nombre, String dependencia, String cargo, LocalDate fechaIngreso,
 			String eps, String arl, String pension, Double sueldo) {
 		try {
@@ -118,9 +130,12 @@ public class EmpleadoDAO {
 			builder.queryParam("codigo", codigo);
 			String url = builder.toUriString();
 			ResponseEntity<Empleado> response = restTemplate.getForEntity(url, Empleado.class);
-			return response.getBody();
+			if(response.getStatusCode().equals(HttpStatus.FOUND)){
+				return response.getBody();
+			}
 		} catch (Exception e) {
 			return null;
 		}
+		return null;
 	}
 }

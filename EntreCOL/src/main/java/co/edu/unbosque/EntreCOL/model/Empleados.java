@@ -17,6 +17,7 @@ import jakarta.persistence.Table;
 @Entity
 @Table(name = "Empleados")
 public class Empleados {
+	
 	@Id
 	private Integer codigo;
 	
